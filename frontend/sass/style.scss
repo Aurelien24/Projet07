@@ -1,0 +1,33 @@
+@import "variable.scss";
+@import "header-footer.scss";
+
+body {
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+
+    #id {
+
+        header {
+            background-color: blanchedalmond;
+        }
+
+        #body {
+            width: 650px;
+            height: 300px;
+
+            #post {
+                width: 650px;
+                height: 300px;
+            }
+
+            .message {
+                width: 650px;
+            }
+        }
+
+        footer {
+            background-color: aqua;
+        }
+    }
+}
