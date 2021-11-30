@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
 
 //const connection = require('../models/query');
 
@@ -28,7 +29,7 @@ exports.addUser = (req, res, next) => {
         .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
         .catch(error => res.status(400).json({ error }));
     })
-    .catch(error => res.status(500).json({ error }));*/
+    .catch(error => res.status(500).json({ error }));
 
 
   bcrypt.hash(req.body.password, 10)
@@ -40,6 +41,39 @@ exports.addUser = (req, res, next) => {
       user.save()
         .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
         .catch(error => res.status(400).json({ error }));
+    })
+    .catch(error => res.status(500).json({ error }));*/
+
+
+
+
+
+    let email = req.body.email;
+    let username = req.body.username;
+    let password = req.body.password;
+
+    if (email == null || username == null || password == null){
+      return res.status(400).json({ 'error': 'missing parameters'});
+    }
+
+    User.findOne({
+      attributes: ['email'],
+      where: { email: email }
+    })
+    .then(function(userFound){
+      if (!userFound) {
+        bcrypt.hash(req.body.password, 10)
+
+        const user = new User({
+          email: req.body.email,
+          pseudo: req.body.pseudo,
+          password: hash
+        })
+        .then(newUser => res.status(201).json({ 'userId': newUser.id }))
+        .catch(error => res.status(500).json({ error }));
+      } else {
+        return res.status(409).json({ 'error': 'Utilisateur déjà existant'});
+      }
     })
     .catch(error => res.status(500).json({ error }));
 };

@@ -9,6 +9,7 @@ const server = http.createServer((req, res) => {
 // donne le port server  || = ou
 server.listen(process.env.PORT || 3000);*/
 
+//const bodyParser = require('body-parser');
 const http = require('http');
 const app = require('./app');
 
