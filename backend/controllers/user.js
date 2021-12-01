@@ -2,51 +2,13 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
+const db = require('../models'); // cherche d'office index.js
 
 //const connection = require('../models/query');
 
 // mdp a hacher + saler idéalement. Ne fonctionne pas du tout !!!
 
-exports.addUser = (req, res, next) => {
-
-  /*bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-
-      // Y as t'il vraiment besoin de new user ?
-      
-      const user = new User({
-        email: req.body.email,
-        pseudo: req.body.pseudo,
-        password: hash
-      });
-      //connection.execute('INSERT INTO `user` (`Pseudo`, `Passeword`, `Mail`) VALUES ("'+req.body.pseudo+'", "'+hash+'", "'+req.body.email+'")');
-
-      ou 
-
-    
-
-      connection.execute('INSERT INTO `user` (`Pseudo`, `Passeword`, `Mail`) VALUES (?, ?, ?)', [req.body.email, hash, req.body.pseudo])
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));
-
-
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash
-      });
-      user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));*/
-
-
-
-
+exports.signup = (req, res, next) => {
 
     let email = req.body.email;
     let username = req.body.username;
@@ -56,21 +18,23 @@ exports.addUser = (req, res, next) => {
       return res.status(400).json({ 'error': 'missing parameters'});
     }
 
-    User.findOne({
-      attributes: ['email'],
+    db.user.findOne({
       where: { email: email }
     })
     .then(function(userFound){
+      console.log(userFound);
       if (!userFound) {
         bcrypt.hash(req.body.password, 10)
-
-        const user = new User({
-          email: req.body.email,
-          pseudo: req.body.pseudo,
-          password: hash
+        .then(hash => {
+          
+          db.user.create({
+            email: req.body.email,
+            username: req.body.username,
+            password: hash
+          })
+          .then(newUser => res.status(201).json({ 'userId': newUser.id }))
+          .catch(error => res.status(500).json({ error }));
         })
-        .then(newUser => res.status(201).json({ 'userId': newUser.id }))
-        .catch(error => res.status(500).json({ error }));
       } else {
         return res.status(409).json({ 'error': 'Utilisateur déjà existant'});
       }

@@ -6,8 +6,10 @@ module.exports = (req, res, next) =>  {
     next();
   } else {
     console.log("erreur mail")
-    alert("You have entered an invalid email address!")
-        console.log("erreur mail")
+    //alert("You have entered an invalid email address!")
+
+    // FAIRE ERREUR TYPE 400
+
     return;
   }
 }

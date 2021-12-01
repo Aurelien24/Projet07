@@ -1,22 +1,8 @@
 const express = require('express');
-const { Sequelize } = require('sequelize');
-//const bodyParser = require('body-parser');
 
 const postRoutes = require('./routes/postRoutes');
 const userRoutes = require('./routes/userRoutes');
 const path = require('path');
-
-//server.use(bodyParser.urlencoded({extended: true}));
-//server.use(bodyParser.json());
-
-// Option 1: Passing a connection URI
-//const sequelize = new Sequelize('sqlite::memory:') // Example for sqlite
-
-// Option 2: Passing parameters separately (sqlite)
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: 'path/to/database.sqlite'
-});
 
 const app = express();
 
@@ -33,13 +19,5 @@ app.use(express.json());
 app.use('/api/post', postRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
-// test connexion -- Ne fonctionne pas !
-/*try {
-  await sequelize.authenticate();
-  console.log('Connection has been established successfully.');
-} catch (error) {
-  console.error('Unable to connect to the database:', error);
-}*/
 
 module.exports = app;

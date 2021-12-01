@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const db = require('../models'); // cherche d'office index.js
 
 exports.addPost = (req, res, next) => {
 
@@ -7,7 +8,7 @@ exports.addPost = (req, res, next) => {
         image: req.body.image
     });
 
-    post.save()
+    db.post.save()
         .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
         .catch(error => res.status(400).json({ error }));
 };
