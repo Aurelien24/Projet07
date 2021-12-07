@@ -43,7 +43,13 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
+
+  console.log(req.body.email);
+
+  const email = req.body.email;
+
+
+  db.user.findOne({ where: { email: email } })
     .then(user => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -72,7 +78,9 @@ exports.changeMDP = (req, res, next) => {
 
   // user model, conflit potentiel avec l'adresse mail
 
-  User.findOne({ email: req.body.email })
+  const email = req.body.email;
+
+  db.user.findOne({ where: { email: email } })
   .then(user => {
     if (!user) {
       return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -84,29 +92,28 @@ exports.changeMDP = (req, res, next) => {
       }
       bcrypt.hash(req.body.newPassword, 10)
       .then(hash => {
-        const password = hash;
-
-        User.updateOne({password: hash})
+        console.log(hash)
+        db.user.updateOne(user.password, { where: { password: hash } }) // push pull update where change { password: hash }
           .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
           .catch(error => res.status(400).json( error ));
       })
-      .catch(error => res.status(500).json({ error }));
+      .catch(() => res.status(500).json({ error: 'Erreur de hashage' }));
     })
-    .catch(error => res.status(500).json({ error }));
+    .catch(() => res.status(500).json({ error: 'Mauvais mot de passe' }));
   })
-  .catch(error => res.status(500).json({ error }));
+  .catch(() => res.status(500).json({ error: 'Utilisateur non trouvé !' }));
 };
 
 exports.addImage = (req, res, next) => {
 
   // Recherche l'utilisateur et ajoute une image
 
-  User.findOne({ email: req.body.email })
+  db.user.findOne({ email: req.body.email })
   .then(user => {
     if (!user) {
       return res.status(401).json({ error: 'Utilisateur non trouvé !' });
     }
-    User.updateOne({image: image})
+    db.user.updateOne({image: image})
       .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
       .catch(error => res.status(400).json( error ));
   })
@@ -118,12 +125,12 @@ exports.changeImage = (req, res, next) => {
 
   // Recherche l'utilisateur et ajoute une image
 
-  User.findOne({ email: req.body.email })
+  db.user.findOne({ email: req.body.email })
   .then(user => {
     if (!user) {
       return res.status(401).json({ error: 'Utilisateur non trouvé !' });
     }
-    User.updateOne({image: image})
+    db.user.updateOne({image: image})
       .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
       .catch(error => res.status(400).json( error ));
   })
