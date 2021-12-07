@@ -93,11 +93,11 @@ exports.changeMDP = (req, res, next) => {
       bcrypt.hash(req.body.newPassword, 10)
       .then(hash => {
         console.log(hash)
-        db.user.updateOne(user.password, { where: { password: hash } }) // push pull update where change { password: hash }
+        db.user.update({password: hash}, { where: { id: user.id } })
           .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
           .catch(error => res.status(400).json( error ));
       })
-      .catch(() => res.status(500).json({ error: 'Erreur de hashage' }));
+      .catch((error) => res.status(500).json({ error }));
     })
     .catch(() => res.status(500).json({ error: 'Mauvais mot de passe' }));
   })

@@ -14,20 +14,22 @@ exports.addPost = (req, res, next) => {
 exports.delPost = (req, res, next) => {
 
     let id = req.body.id;
-    let userId = req.body.userId;
+    let userId = req.body.userId; // Ou peut être ailleur lol
 
     db.post.findOne({
         where: { id: id }
     })
     .then(post => {
+        console.log("coucou")
 
         // MANQUE UNE VÉRIFICATION DU ID DE L'UTILISATEUR
         //if(post.userId == userId){}
 
         // Peut se faire en lien avec auth ? Sans passé directement part userId. userId peut donner une info aux hacker
 
-        db.post.delet() // Erreur ?
-            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+        // Cahnger pour avoir une adresse comme /post/:id du post  et changer le verbe HTTP pour la modification (postman)
+        post.destroy() // Erreur ?
+            .then(() => res.status(201).json({ message: 'post supprimer' }))
             .catch(error => res.status(400).json({ error }));
     })
     .catch(() => res.status(401).json({ error: 'Post non trouvé !' }));
