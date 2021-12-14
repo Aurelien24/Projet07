@@ -16,9 +16,14 @@ const db = {};
 
 db.user = require("./user.js")(sequelize, Sequelize)
 db.post = require("./post.js")(sequelize, Sequelize)
+db.com = require("./com.js")(sequelize, Sequelize)
 
 db.user.hasMany(db.post) // A beaucoup de post
 db.post.belongsTo(db.user) // A un seul
+
+db.com.belongsTo(db.user )
+db.user.hasMany(db.com)
+db.post.hasMany(db.com)
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;

@@ -13,7 +13,11 @@ module.exports = (sequelize, Sequelize) => sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: false
   },
-
+  admin: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  
 }, {
   sequelize, 
   modelName: 'user' 

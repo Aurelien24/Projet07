@@ -30,7 +30,8 @@ exports.signup = (req, res, next) => {
           db.user.create({
             email: req.body.email,
             username: req.body.username,
-            password: hash
+            password: hash,
+            admin: "false"
           })
           .then(newUser => res.status(201).json({ 'userId': newUser.id }))
           .catch(error => res.status(500).json({ error }));

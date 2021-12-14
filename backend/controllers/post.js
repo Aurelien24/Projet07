@@ -1,6 +1,7 @@
 const Post = require('../models/post');
 const db = require('../models'); // cherche d'office index.js
 const user = require('../models/user');
+const { text } = require('body-parser');
 
 
 // NE PREND PAS LES PHOTOS !!!
@@ -15,6 +16,7 @@ exports.delPost = (req, res, next) => {
 
     let id = req.body.id;
     let userId = req.body.userId; // Ou peut être ailleur lol
+    let admin = req.body.admin;
 
     db.post.findOne({
         where: { id: id }
@@ -23,7 +25,7 @@ exports.delPost = (req, res, next) => {
         console.log("coucou")
 
         // MANQUE UNE VÉRIFICATION DU ID DE L'UTILISATEUR
-        //if(post.userId == userId){}
+        //if(post.userId == userId || admin == true){}
 
         // Peut se faire en lien avec auth ? Sans passé directement part userId. userId peut donner une info aux hacker
 
@@ -32,19 +34,21 @@ exports.delPost = (req, res, next) => {
             .then(() => res.status(201).json({ message: 'post supprimer' }))
             .catch(error => res.status(400).json({ error }));
     })
-    .catch(() => res.status(401).json({ error: 'Post non trouvé !' }));
+    .catch(() => res.status(404).json({ error: 'Post non trouvé !' }));
 };
 
 exports.changePost = (req, res, next) => {
 
-    const post = new Post({
-        text: req.body.text,
-        image: req.body.image
-    });
-
-    Post.UpdateOne() // Erreur ?
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
+    let id = req.body.id;
+    let text = req.body.text
+    db.post.findOne({ where: { id: id } })
+    .then(post => {
+        console.log("recherche faite")
+        db.post.update({text: text}, { where: { id: id } }) // Erreur ?
+        .then(() => res.status(201).json({ message: 'Post changer' }))
+        .catch(() => res.status(400).json({ error: 'Post non mis a jour !' }));
+    })
+    .catch(() => res.status(404).json({ error: 'Utilisateur non trouvé !' }));
 };
 
 exports.addCom = (req, res, next) => {
