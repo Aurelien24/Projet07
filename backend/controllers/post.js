@@ -3,6 +3,16 @@ const db = require('../models'); // cherche d'office index.js
 const user = require('../models/user');
 const { text } = require('body-parser');
 
+// Prendre /post -> Renvoit les postes (mur sans fin)
+
+// prendre /post
+
+/*GET /posts -> récup tout les post
+POST /posts - crée un post
+GET /posts/1 -> obtien 1 post
+PATCH|PUT /posts/1 -> modif un post
+DELETE /posts/1 -> supprime un post
+*/
 
 // NE PREND PAS LES PHOTOS !!!
 exports.addPost = (req, res, next) => {
@@ -14,7 +24,7 @@ exports.addPost = (req, res, next) => {
 
 exports.delPost = (req, res, next) => {
 
-    let id = req.body.id;
+    let id = req.params.id;
     let userId = req.body.userId; // Ou peut être ailleur lol
     let admin = req.body.admin;
 
@@ -39,7 +49,7 @@ exports.delPost = (req, res, next) => {
 
 exports.changePost = (req, res, next) => {
 
-    let id = req.body.id;
+    let id = req.params.id;
     let text = req.body.text
     db.post.findOne({ where: { id: id } })
     .then(post => {
@@ -51,41 +61,4 @@ exports.changePost = (req, res, next) => {
     .catch(() => res.status(404).json({ error: 'Utilisateur non trouvé !' }));
 };
 
-exports.addCom = (req, res, next) => {
-
-    const com = new Com({
-        text: req.body.text
-    });
-
-    com.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-};
-
-exports.delCom = (req, res, next) => {
-
-   Post.findOne({id:id})
-    .then(post => {
-        if (!post) {
-          return res.status(401).json({ error: 'Post non trouvé !' });
-        }
-        Post.delet() // Erreur ?
-            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(400).json({ error }));
-};
-
-exports.changeCom = (req, res, next) => {
-
-    Post.findOne({id:id})
-    .then(post => {
-        if (!post) {
-          return res.status(401).json({ error: 'Post non trouvé !' });
-        }
-        Post.UpdateOne() // Erreur ?
-            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(400).json({ error }));
-};
+// Ajouter la demande de post. 

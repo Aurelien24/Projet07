@@ -5,21 +5,39 @@ const com = require('../models/com');
 const { text } = require('body-parser');
 
 
+/*
+GET /posts/1/comments
+POST /posts/1/comments
+GET /posts/1/comments/2
+PATCH|PUT /posts/1/comments/2
+DELETE /posts/1/comments/2
+*/
+
+// RÉCUPÉRER LES ID USER AVEC LE TOKEN; PRENDRE LE POSTID de l'url
+
+
 // NE PREND PAS LES PHOTOS !!!
 exports.addCom = (req, res, next) => {
 
     let text = req.body.text;
     let userId = req.body.userId;
-    let postId = req.body.postId;
+    let postId = req.params.postId;
 
-    db.com.create({text: text, userId:userId, postId:postId })
+    //console.log('postId ='postId);
+
+    db.com.create({
+        text:text,
+        userId:userId,
+        postId:postId
+    })
         .then(newCom => res.status(201).json({ 'postId': newCom.id }))
         .catch(error => res.status(500).json({ error }));
 };
 
 exports.delCom = (req, res, next) => {
 
-    let id = req.body.id;
+    let postId = req.params.postId;
+    let id = req.params.id;
     let userId = req.body.userId; // Ou peut être ailleur lol
     let admin = req.body.admin;
 
@@ -37,7 +55,8 @@ exports.delCom = (req, res, next) => {
 
 exports.changeCom = (req, res, next) => {
 
-    let id = req.body.id;
+    let postId = req.params.postId;
+    let id = req.params.id;
     let text = req.body.text
     db.com.findOne({ where: { id: id } })
     .then(com => {
@@ -48,3 +67,6 @@ exports.changeCom = (req, res, next) => {
     })
     .catch(() => res.status(404).json({ error: 'Utilisateur non trouvé !' }));
 };
+
+
+// ajouter le find des commentaire d'un poste. VueJs doit le demander en début de cycle de vie quand il va afficher les poste.

@@ -1,5 +1,5 @@
 <template>
-	<div class="Pas-Connecter">
+	<div class="pas-connecter">
 		<div class="center">
             <div class="title">
                 <h1>Veuiller vous connecter</h1>
