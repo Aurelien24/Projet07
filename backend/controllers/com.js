@@ -30,8 +30,8 @@ exports.addCom = (req, res, next) => {
         userId:userId,
         postId:postId
     })
-        .then(newCom => res.status(201).json({ 'postId': newCom.id }))
-        .catch(error => res.status(500).json({ error }));
+    .then(newCom => res.status(201).json({ 'postId': newCom.id }))
+    .catch(error => res.status(500).json({ error }));
 };
 
 exports.delCom = (req, res, next) => {
@@ -60,12 +60,15 @@ exports.changeCom = (req, res, next) => {
     let text = req.body.text
     db.com.findOne({ where: { id: id } })
     .then(com => {
-        console.log("recherche faite")
+        console.log("recherche faite", com)
+        if (com == null){
+            return res.status(404).json({ message : 'Commentaire non trouvé'}) // a faire sur les autres + vérifier l'url (postId)
+        }
         db.com.update({text: text}, { where: { id: id } }) // Erreur ?
         .then(() => res.status(201).json({ message: 'Post changer' }))
         .catch(() => res.status(400).json({ error: 'Post non mis a jour !' }));
     })
-    .catch(() => res.status(404).json({ error: 'Utilisateur non trouvé !' }));
+    .catch(() => res.status(404).json({ error: 'Commentaire non trouvé !' }));
 };
 
 

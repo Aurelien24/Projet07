@@ -61,4 +61,11 @@ exports.changePost = (req, res, next) => {
     .catch(() => res.status(404).json({ error: 'Utilisateur non trouvé !' }));
 };
 
+exports.allPost = (req, res, next) => {
+
+    db.post.findAll()
+        .then(() => res.status(201).json({ message: 'Tout les posts son envoyé' }))
+        .catch(error => res.status(400).json({ error }));
+}
+
 // Ajouter la demande de post. 

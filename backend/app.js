@@ -18,8 +18,8 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use('/api/post', postRoutes);
-app.use('/api/auth', userRoutes);
-app.use('/api/com', comRoutes);
+app.use('/api', userRoutes);
+app.use('/api', comRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
