@@ -2,7 +2,7 @@
 	<div class="pas-connecter flex center bg-secondary">
 		<div class="connexion">
             <div class="title">
-                <h1>Veuiller vous connecter</h1>
+                <h1>Veuiller vous inscrire</h1>
             </div>
             <div class="formulaire">
                 <form>
@@ -12,6 +12,10 @@
                     </div>
                     <div class="form-groupe flex">
                         <label for="pass">Votre mot de passe :</label>
+                        <input type="password" class="form-control" placeholder="******" name="password" id="nom" required="true"/>
+                    </div>
+                    <div class="form-groupe flex">
+                        <label for="pass">Confirmer votre mot de passe :</label>
                         <input type="password" class="form-control" placeholder="******" name="password" id="nom" required="true"/>
                     </div>
                     <div class="button flex">
@@ -25,7 +29,7 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'SignOn',
 }
 </script>
 

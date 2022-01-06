@@ -1,5 +1,3 @@
-// ./components/HomeLink.vue
-
 <script>
 export default {
 	name: 'Header',
@@ -14,18 +12,16 @@ export default {
 	
     <header class="header flex couleur-principal bg-primary">
         <nav class="flex space-around">
-            <a href="urlIndex" class="h3">Accueil</a>
-            <a href="urlConnexion" class="h3">Connexion</a> 
-            <a href="urlInscription" class="h3">Inscription</a>
+            <router-link to="/" class="h3">Accueil</router-link>
+            <router-link to="/login" class="h3">Connexion</router-link>
+            <router-link to="/sign" class="h3">Inscription</router-link>
         </nav>
     </header>
 </template>
 
 <style lang="scss">
-
     header{
         height: 60px;
-
         nav {
             width: 100%;
         }

@@ -1,21 +1,21 @@
 <template>
-  <div class="home">
+  <div class="sign">
     <!-- POURQUOI ???? Mettre des messages innutil ???-->
     <Header msg="Welcome to Your Vue.js App"/>
-    <Whall msg="Welcome to Your Vue.js App"/>
+    <SignOn msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
-import Whall from '@/components/Home.vue'
+import SignOn from '@/components/SignOn.vue'
 
 export default {
-  name: 'Home',
+  name: 'Sign',
   components: {
     Header,
-    Whall
+    SignOn,
   }
 }
 </script>
