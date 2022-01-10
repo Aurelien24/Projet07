@@ -3,8 +3,10 @@
 		<div class="connexion">
             <div class="title">
                 <h1>Vous êtes "connecter"</h1>
+                <button>Vos publications</button>
+                <button>Nouveauté</button>
             </div>
-            <div class="bcp-de-poste">
+            <div class="bcp-de-poste-Nouveaute-Incorporer-un-component-passé-ce-script-dans-views?">
 
             </div>
         </div>

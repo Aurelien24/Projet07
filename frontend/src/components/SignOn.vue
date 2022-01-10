@@ -32,27 +32,3 @@ export default {
   name: 'SignOn',
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
-// h1 seize ?
-.pas-connecter {
-	width: 100%;
-    height: calc(100vh - 30px);
-}
-
-.button {
-    width: 100%;
-    button {
-        padding: 10px;
-    }
-}
-
-.form-groupe{
-    flex-direction: column;
-}
-
-form > div {
-    margin-top: 15px;
-}
-</style>
