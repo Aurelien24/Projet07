@@ -5,9 +5,9 @@
                 <h1>Vous êtes "connecter"</h1>
                 <button>Vos publications</button>
                 <button>Nouveauté</button>
-            </div>
-            <div class="bcp-de-poste-Nouveaute-Incorporer-un-component-passé-ce-script-dans-views?">
-
+                <ul>
+                    <li v-for="post in posts" v-bind:key="post.id"> mon text : {{post.text}}</li>
+                </ul>
             </div>
         </div>
 	</div>
@@ -15,7 +15,12 @@
 
 <script>
 export default {
-  name: 'SignOn',
+  name: 'Whall',
+  props: {
+    posts: {
+        type: Array
+    }
+  }
 }
 </script>
 

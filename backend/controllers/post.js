@@ -62,9 +62,9 @@ exports.changePost = (req, res, next) => {
 };
 
 exports.allPost = (req, res, next) => {
-
+console.log("ont passe part allPost")
     db.post.findAll()
-        .then(() => res.status(201).json({ message: 'Tout les posts son envoyé' }))
+        .then((data) => res.status(200).json(data))
         .catch(error => res.status(400).json({ error }));
 }
 

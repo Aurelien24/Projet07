@@ -8,7 +8,7 @@
                 <form>
                     <div class="form-groupe flex">
                         <label for="nom">Votre nom :</label>
-                        <input type="text" class="form-control" placeholder="Jean" name="pseudo" id="nom" required="true"/>
+                        <input type="text" class="form-control" placeholder="Jean" name="username" id="nom" required="true"/>
                     </div>
                     <div class="form-groupe flex">
                         <label for="pass">Votre mot de passe :</label>
@@ -25,6 +25,6 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Wall'
 }
 </script>

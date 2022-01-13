@@ -8,15 +8,19 @@
                 <form>
                     <div class="form-groupe flex">
                         <label for="nom">Votre nom :</label>
-                        <input type="text" class="form-control" placeholder="Jean" name="pseudo" id="nom" required="true"/>
+                        <input type="text" class="form-control" placeholder="Jean" name="username" required="true"/>
+                    </div>
+                    <div class="form-groupe flex">
+                        <label for="nom">Votre email :</label>
+                        <input type="text" class="form-control" placeholder="JeanMarcel@yahoo.com" name="email" required="true"/>
                     </div>
                     <div class="form-groupe flex">
                         <label for="pass">Votre mot de passe :</label>
-                        <input type="password" class="form-control" placeholder="******" name="password" id="nom" required="true"/>
+                        <input type="password" class="form-control" placeholder="******" name="password" required="true"/>
                     </div>
                     <div class="form-groupe flex">
                         <label for="pass">Confirmer votre mot de passe :</label>
-                        <input type="password" class="form-control" placeholder="******" name="password" id="nom" required="true"/>
+                        <input type="password" class="form-control" placeholder="******" name="password" required="true"/>
                     </div>
                     <div class="button flex">
                         <button class="bg-primary h5">Connexion</button>

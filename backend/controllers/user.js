@@ -10,6 +10,8 @@ const db = require('../models'); // cherche d'office index.js
 
 exports.signup = (req, res, next) => {
 
+    console.log("on passe part signup !");
+
     let email = req.body.email;
     let username = req.body.username;
     let password = req.body.password;
@@ -45,12 +47,13 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
 
-  console.log(req.body.email);
-
+  
   const email = req.body.email;
+  const username = req.body.username;
 
+  console.log(username);
 
-  db.user.findOne({ where: { email: email } })
+  db.user.findOne({ where: { username: username } })
     .then(user => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -76,6 +79,8 @@ exports.login = (req, res, next) => {
 
 
 exports.changeMDP = (req, res, next) => {
+
+  console.log("on passe part changeMDP !");
 
   // user model, conflit potentiel avec l'adresse mail
 
@@ -124,6 +129,8 @@ exports.addImage = (req, res, next) => {
 
 exports.changeImage = (req, res, next) => {
 
+
+  console.log("on passe part changeImage !");
   // Recherche l'utilisateur et ajoute une image
 
   db.user.findOne({ email: req.body.email })
