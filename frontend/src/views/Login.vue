@@ -5,7 +5,7 @@
     <div class="pas-connecter flex center bg-secondary">
       <div class="connexion">
         <div class="title">
-        <h1>Veuiller vous inscrire</h1>
+        <h1>Veuiller vous connecter</h1>
         </div>
         <div class="formulaire">
           <form>
@@ -85,8 +85,10 @@ export default {
     console.log("Le fetch de connexion va se lancer!")
 
     fetch("http://localhost:3000/api/login", option)
-      .then(response => response.json())
+      .then(response => console.log(response.json("token"))) // Problème : la réponse ne se récupère pas. [objet sans réponse] code : sessionStorage.setItem('token', response.token), console.log(this.response)
       .catch(err => console.log(`Erreur avec le message : ${err}`));
+
+    
       //const json = await response.json()
       /*if (response.ok) {
         //return json

@@ -29,9 +29,14 @@ export default {
   },
   mounted() {
     console.log("bonjour");
-    fetch("http://localhost:3000/api/post")
-    .then(response => response.json())
-      .then(data => this.posts=data)
+    if(window.sessionStorage.token == true){
+      fetch("http://localhost:3000/api/post")
+        .then(response => response.json())
+          .then(data => this.posts=data)
+    } else {
+      console.log("vous allez etre redirigé")
+      window.location = "/#/login"
+    }
   },
   data() {
     return {
