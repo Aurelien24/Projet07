@@ -8,7 +8,7 @@
         <h1>Veuiller vous connecter</h1>
         </div>
         <div class="formulaire">
-          <form>
+          <form @submit.prevent="login">
             <div class="form-groupe flex">
               <label for="nom">Votre nom :</label>
               <input type="text" class="form-control" placeholder="Jean" name="username" id="nom" required="true" v-model="username"/>
@@ -18,7 +18,7 @@
               <input type="password" class="form-control" placeholder="******" name="password" id="nom" required="true" v-model="password"/>
             </div>
             <div class="button flex">
-              <button v-on:click="login()" class="bg-primary h5" type="submit">Connexion</button>
+              <button class="bg-primary h5" type="submit">Connexion</button>
             </div>
           </form>
         </div>
@@ -59,12 +59,14 @@ export default {
   data() {
     return {
       username: '',
-      password: '',
+      password: ''
     }
   },
   methods: {
-    // ne se lance pas avec le : async
+    
     login(){
+
+    let username = this.username;
 
     let data = {
       username: this.username,
@@ -85,21 +87,13 @@ export default {
     console.log("Le fetch de connexion va se lancer!")
 
     fetch("http://localhost:3000/api/login", option)
-      .then(response => console.log(response.json("token"))) // Problème : la réponse ne se récupère pas. [objet sans réponse] code : sessionStorage.setItem('token', response.token), console.log(this.response)
+      .then(response => response.json())
+        .then(tokenContenaire => sessionStorage.setItem('token', tokenContenaire.token), sessionStorage.setItem('username', username) ) // Problème : la réponse ne se récupère pas. [objet sans réponse] code : sessionStorage.setItem('token', response.token), console.log(this.response)
+          .then(() => window.location = "/#")
       .catch(err => console.log(`Erreur avec le message : ${err}`));
 
-    
-      //const json = await response.json()
-      /*if (response.ok) {
-        //return json
-        return response
-      } else {
-        console.log("échec de la connexion")
-      }
-    } catch (error) {
-            //
-    }*/
-    
+      // réupérer event puis -> event prévenent default avec vueJs : 
+
     }
   }
 }

@@ -68,4 +68,14 @@ console.log("ont passe part allPost")
         .catch(error => res.status(400).json({ error }));
 }
 
+exports.onePost = (req, res, next) => {
+    let id = req.params.id;
+
+    console.log("ont passe part onePost")
+    
+    db.post.findOne({ where: { id: id } })
+        .then((data) => res.status(200).json(data))
+        .catch(error => res.status(400).json({ error }));
+}
+
 // Ajouter la demande de post. 

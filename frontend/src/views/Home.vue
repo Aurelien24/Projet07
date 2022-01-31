@@ -1,66 +1,127 @@
 <template>
-<div class="home">
-  <!-- Peut inclure les props-->
-  <Header/>
-  <div class="pas-connecter flex center bg-secondary">
-    <div class="connexion">
-      <div class="title">
-        <h1>Vous êtes "connecter"</h1>
-        <button>Vos publications</button>
-        <button>Nouveauté</button>
-      </div>
-      <div v-for="post in posts" v-bind:key="post.id" class="post">
-        <p class="title"> Part : {{post.userId}}</p>
-        <p>{{post.text}}</p>
-      </div>
+    <div class="home">
+    <!-- Peut inclure les props-->
+        <HeaderCo/>
+        <div class="pas-connecter flex center bg-secondary">
+            <div class="connexion">
+                <div class="title">
+                    <h1>Vous êtes "connecter"</h1>
+                    <button>Vos publications</button>
+                    <button>Nouveauté</button>
+                </div>
+                <div>
+                    <form @submit.prevent="newPost">
+                        <input type="text" class="form-control" placeholder="Votre text" name="textMsg" id="textPost" required="true" v-model="textMsg"/>  <!-- required="false" avec image -->
+                        <button v-on:click="newPost()" type="submit">Poster</button>
+                    </form>
+                    <router-link to="/post/post.id" v-for="post in posts" v-bind:key="post.id" class="post">
+                        <div  v-on:click="post(post.id)"  >
+                            <p class="title"> Part : {{post.userId}}</p>
+                            <p>{{post.text}}</p>
+                        </div>
+                    </router-link>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 </template>
 
 <script>
 // @ is an alias to /src             setTimeout(() => {this.posts=data}, 5000)
-import Header from '@/components/Header.vue'
+import HeaderCo from '@/components/HeaderCo.vue'
+
+// import router from '@/router/index.js'
+
 
 export default {
-  name: 'Home',
-  components: {
-    Header
-  },
-  mounted() {
-    console.log("bonjour");
-    if(window.sessionStorage.token == true){
-      fetch("http://localhost:3000/api/post")
-        .then(response => response.json())
-          .then(data => this.posts=data)
-    } else {
-      console.log("vous allez etre redirigé")
-      window.location = "/#/login"
+    name: 'Home',
+    components: {
+    HeaderCo
+    },
+    
+    data() {
+        return {
+            posts : [],
+            textMsg : ''
+        }
+    },
+    method: {
+        newPost() {
+
+            console.log("le poste se crée")
+
+            let data = {
+                text: this.textMsg
+            }
+
+            let token = window.sessionStorage.token;
+
+            let option = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(data)//body: JSON.stringify(data) -> récupe la variable data du dessus et non le data()
+            }
+
+            //if(textPost.length >= 12){ // textMsg ne fonctionne pas non plus
+            fetch("http://localhost:3000/api/login", option)
+                .then(response => response.json())
+                .catch(() => alert("Une erreur est survenu"))
+            //} 
+        }
+    },
+    mounted() {
+
+        console.log(window.sessionStorage.token) 
+
+        let token = window.sessionStorage.token;
+
+        console.log("bonjour");
+        if(window.sessionStorage.token){
+
+        let option = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }
+
+        fetch("http://localhost:3000/api/post", option)
+            .then(response => response.json())
+                .then(data => this.posts=data)
+                .catch(() => window.location = "/#/login") // ne fontionne pas. Se tire dans le pied avec le rooter qui as un système similaire.
+            .catch(() => window.location = "/#/login")
+        } else {
+            console.log("vous allez etre redirigé")
+        }
     }
-  },
-  data() {
-    return {
-      posts : []
-    }
-  }
+    //redirection() {
+    //  window.location = "/#/login"
+    //}
+
 }
+
 </script>
 
 <style lang="scss">
 // h1 seize ?
 .pas-connecter {
-	width: 100%;
-  height: calc(100vh - 60px);
+    width: 100%;
+    height: calc(100vh - 60px);
 }
 .post {
-  margin-top: 15px;
-  padding: 5px;
-  //border: 1px, solid, black;
-  border: solid;
+    margin-top: 15px;
+    padding: 5px;
+    //border: 1px, solid, black;
+    border: solid;
 
-  .title {
-    text-align: left;
-    margin-top: 5px;
-  }
+    .title {
+        text-align: left;
+        margin-top: 5px;
+    }
 }
 </style>

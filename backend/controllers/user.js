@@ -82,11 +82,13 @@ exports.changeMDP = (req, res, next) => {
 
   console.log("on passe part changeMDP !");
 
-  // user model, conflit potentiel avec l'adresse mail
+  //  ALLERTE SéCURITé : const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+  //  const userId = decodedToken.userId;
+  // Au lieu de username !
+  
+  const username = req.body.username;
 
-  const email = req.body.email;
-
-  db.user.findOne({ where: { email: email } })
+  db.user.findOne({ where: { username: username } })
   .then(user => {
     if (!user) {
       return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -142,4 +144,28 @@ exports.changeImage = (req, res, next) => {
       .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
       .catch(error => res.status(400).json( error ));
   })
+};
+
+exports.changeEmail = (req, res, next) => {
+
+  // ALLERTE SéCURITé : const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+  //  const userId = decodedToken.userId;
+  // Au lieu de username !
+
+  console.log("on passe part changeEmail !");
+
+  const username = req.body.username;
+  const email = req.body.newMail;
+
+  console.log(username);
+  console.log(email);
+
+  db.user.findOne({ where: { username: username } })
+  .then(user => {
+
+    db.user.update({email: email}, { where: { id: user.id } })
+      .then(() => res.status(200).json({ message: 'email mis a jour'}))
+      .catch(error => res.status(400).json( error ));
+  })
+  .catch(() => res.status(500).json({ error: 'Utilisateur non trouvé !' }));
 };
