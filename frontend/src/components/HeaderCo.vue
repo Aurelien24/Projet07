@@ -29,7 +29,7 @@ export default {
         deco() {
 
             console.log("Déco en cour")
-            let token = window.sessionStorage.token;
+            //let token = window.sessionStorage.token;
 
             sessionStorage.clear()
             // redirection a faire

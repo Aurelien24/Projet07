@@ -6,8 +6,8 @@
             <div class="connexion">
                 <div class="title">
                     <h1>Vous êtes "connecter"</h1>
-                    <button>Vos publications</button>
-                    <button>Nouveauté</button>
+                    <button v-on:click="mesPost">Vos publications</button>
+                    <button v-on:click="allPost">Nouveauté</button>
                 </div>
                 <div>
                     <form @submit.prevent="newPost">
@@ -74,7 +74,58 @@ export default {
                 .then((response) => response.json()) // , this.$router.push('/#') ne fonctionne pas pour refresh
                 .catch(() => alert("Une erreur est survenu"))
             //} 
+        },
+
+        allPost(){
+            console.log(window.sessionStorage.token) 
+
+            let token = window.sessionStorage.token;
+
+            console.log("bonjour");
+            if(window.sessionStorage.token){
+
+            let option = {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            }
+
+            fetch("http://localhost:3000/api/post", option)
+                .then(response => response.json())
+                    .then(data => this.posts=data)
+            } else {
+                console.log("vous allez etre redirigé")
+            }
+        },
+
+        mesPost(){
+
+            console.log(window.sessionStorage.token) 
+
+            let token = window.sessionStorage.token;
+
+            console.log("bonjour");
+            if(window.sessionStorage.token){
+
+            let option = {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            }
+
+            fetch("http://localhost:3000/api/mesPost", option)
+                .then(response => response.json())
+                    .then(data => this.posts=data)
+            } else {
+                console.log("vous allez etre redirigé")
+            }
         }
+
+
     },
     mounted() {
 
