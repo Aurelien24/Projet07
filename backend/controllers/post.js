@@ -71,7 +71,9 @@ exports.changePost = (req, res, next) => {
 
 exports.allPost = (req, res, next) => {
 console.log("ont passe part allPost")
-    db.post.findAll()
+    db.post.findAll({ order: [
+        ['updatedAt', 'DESC'],
+    ]})
         .then((data) => res.status(200).json(data))
         .catch(error => res.status(400).json({ error }));
 }

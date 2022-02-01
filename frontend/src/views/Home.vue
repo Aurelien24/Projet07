@@ -71,7 +71,7 @@ export default {
 
             //if(textPost.length >= 12){ // textMsg ne fonctionne pas non plus
             fetch("http://localhost:3000/api/post", option)
-                .then(response => response.json())
+                .then((response) => response.json()) // , this.$router.push('/#') ne fonctionne pas pour refresh
                 .catch(() => alert("Une erreur est survenu"))
             //} 
         }
