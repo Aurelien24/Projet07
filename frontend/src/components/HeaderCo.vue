@@ -15,34 +15,29 @@
 </template>
 
 <script>
-/*export default {
-	name: 'Header',
-},
-deco() {
 
-    debug.log("Déco en cour")
-    //let token = window.sessionStorage.token;
-
-    storage.clear(); // sessionStorage.clear() ?
-}*/
-
-/*export default {
-	name: 'Header',
-},
-data {
-    let token = window.sessionStorage.token;
-},
-deco() {
-
-    debug.log("Déco en cour")
-    let token = window.sessionStorage.token;
-
-    storage.clear(token); // sessionStorage.clear() ?
-}*/
 
 export default {
 	name: 'Header',
+
+    data(){
+    return {
+
+    }
+    },
+    methods: {
+        deco() {
+
+            console.log("Déco en cour")
+            let token = window.sessionStorage.token;
+
+            sessionStorage.clear()
+            // redirection a faire
+            this.$router.push('/login')
+        }
+    }
 }
+
 </script> 
 
 <style lang="scss">

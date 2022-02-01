@@ -1,7 +1,7 @@
-const Post = require('../models/post');
 const db = require('../models'); // cherche d'office index.js
-const user = require('../models/user');
+
 const { text } = require('body-parser');
+const jwt = require('jsonwebtoken');
 
 // Prendre /post -> Renvoit les postes (mur sans fin)
 
@@ -17,7 +17,15 @@ DELETE /posts/1 -> supprime un post
 // NE PREND PAS LES PHOTOS !!!
 exports.addPost = (req, res, next) => {
 
-    db.post.create({text: req.body.text})
+    const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
+    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+    const userId = decodedToken.userId;
+
+    console.log(token)
+    console.log(decodedToken)
+    console.log(userId + " seras l'user id")
+
+    db.post.create({text: req.body.text, userId: userId})
         .then(newPost => res.status(201).json({ 'postId': newPost.id }))
         .catch(error => res.status(500).json({ error }));
 };

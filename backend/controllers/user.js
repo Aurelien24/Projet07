@@ -169,3 +169,16 @@ exports.changeEmail = (req, res, next) => {
   })
   .catch(() => res.status(500).json({ error: 'Utilisateur non trouvé !' }));
 };
+
+exports.user = (req, res, next) => {
+
+  const username = req.body.username;
+
+  console.log(username)
+
+  // risque de donner plus que l'utilisateur et le mail
+
+  db.user.findOne({ where: { username: username } })
+    .then(data => res.status(200).json(data))
+    .catch(() => res.status(500).json({ error: 'Utilisateur non trouvé !' }));
+}

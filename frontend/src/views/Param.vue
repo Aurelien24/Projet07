@@ -11,20 +11,19 @@
                 <div class="form-groupe flex">
                     <label for="nom">Votre nom :</label>
                     <div>
-                        <p> Votre nom (data ? fetch ?)</p>
+                        <p>{{ name }}</p>
                     </div>
                 </div>
                 <div class="form-groupe flex">
                     <label for="nom">Votre email :</label>
                     <div>
-                        <p> Votre email (data ? fetch ?)</p>
-                        <button> Changer d'email </button>
+                        <p>{{ email }}</p>
                     </div>
                 </div>
                 <div class="form-groupe flex">
-                    <label for="nom">Votre mot de passe :</label>
+                    <label for="nom">Votre image :</label>
                     <div>
-                        <button> Changer de mot de passe </button>
+                        <p>{{ image }}</p>
                     </div>
                 </div>
             </form>
@@ -47,7 +46,7 @@
                     <input type="text" class="form-control" placeholder="JeanMarcel@yahoo.com" name="newMail2" required="true" v-model="newMail2"/>
                 </div>
                 <div class="button flex">
-                    <button v-on:click="changeMail()" class="bg-primary h5" type="submit">Changer votre email</button>
+                    <button class="bg-primary h5" type="submit">Changer votre email</button>
                 </div>
             </form>
         </div>
@@ -69,7 +68,7 @@
                     <input type="password" class="form-control" placeholder="******" name="newPassword2" required="true" v-model="newPassword2"/>
                 </div>
                 <div class="button flex">
-                    <button v-on:click="changeMDP()" class="bg-primary h5" type="submit">Changer votre mot de passe</button>
+                    <button class="bg-primary h5" type="submit">Changer votre mot de passe</button>
                 </div>
             </form>
         </div>
@@ -94,7 +93,8 @@ export default {
             newMail2: '',
             passwordMDP: '',
             newPassword: '',
-            newPassword2: ''
+            newPassword2: '',
+            name: window.sessionStorage.username
         }    
     },
     methods: {
@@ -167,6 +167,27 @@ export default {
                     .catch(err => console.log(`Erreur avec le message : ${err}`));
             }
         }
+    },
+    mounted() {
+
+
+        // Récupérer l'id du token pour savoir des identifien !
+
+        let token = window.sessionStorage.token;
+
+        console.log("bonjour");
+
+        let option = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }
+
+        fetch("http://localhost:3000/api/user", option)
+            .then(data => data.json())
+            .catch(err => console.log(err))
     }
 }
 </script>

@@ -12,11 +12,14 @@
                 <div>
                     <form @submit.prevent="newPost">
                         <input type="text" class="form-control" placeholder="Votre text" name="textMsg" id="textPost" required="true" v-model="textMsg"/>  <!-- required="false" avec image -->
-                        <button v-on:click="newPost()" type="submit">Poster</button>
+                        <button type="submit">Poster</button>
                     </form>
                     <router-link to="/post/post.id" v-for="post in posts" v-bind:key="post.id" class="post">
                         <div  v-on:click="post(post.id)"  >
-                            <p class="title"> Part : {{post.userId}}</p>
+                            <div>
+                                <p class="title"> Part : {{post.userId}}</p>
+                                <p class="title"> {{post.createdAt}}</p>
+                            </div>
                             <p>{{post.text}}</p>
                         </div>
                     </router-link>
@@ -45,7 +48,7 @@ export default {
             textMsg : ''
         }
     },
-    method: {
+    methods: {
         newPost() {
 
             console.log("le poste se crée")
@@ -67,7 +70,7 @@ export default {
             }
 
             //if(textPost.length >= 12){ // textMsg ne fonctionne pas non plus
-            fetch("http://localhost:3000/api/login", option)
+            fetch("http://localhost:3000/api/post", option)
                 .then(response => response.json())
                 .catch(() => alert("Une erreur est survenu"))
             //} 
@@ -93,8 +96,6 @@ export default {
         fetch("http://localhost:3000/api/post", option)
             .then(response => response.json())
                 .then(data => this.posts=data)
-                .catch(() => window.location = "/#/login") // ne fontionne pas. Se tire dans le pied avec le rooter qui as un système similaire.
-            .catch(() => window.location = "/#/login")
         } else {
             console.log("vous allez etre redirigé")
         }
