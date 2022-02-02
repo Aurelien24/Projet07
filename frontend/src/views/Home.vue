@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-    <!-- Peut inclure les props-->
+    Peut inclure les props-->
         <HeaderCo/>
         <div class="pas-connecter flex center bg-secondary">
             <div class="connexion">
@@ -14,15 +14,15 @@
                         <input type="text" class="form-control" placeholder="Votre text" name="textMsg" id="textPost" required="true" v-model="textMsg"/>  <!-- required="false" avec image -->
                         <button type="submit">Poster</button>
                     </form>
-                    <router-link to="/post/:post.id" v-for="post in posts" v-bind:key="post.id" class="post">
-                        <div  v-on:click="post(post.id)"  >
-                            <div>
-                                <p class="title"> Part : {{post.userId}}</p>
-                                <p class="title"> {{post.createdAt}}</p>
-                            </div>
-                            <p>{{post.text}}</p>
+                   <!-- <router-link :to="{ path: 'post/', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" class="post"> -->
+                    <form @submit.prevent="postId(post.id)" v-for="post in posts" v-bind:key="post.id" class="post">
+                        <div>
+                            <p class="title"> Part : {{post.userId}}</p>
+                            <p class="title"> {{post.createdAt}}</p>
                         </div>
-                    </router-link>
+                        <p>{{post.text}}</p>
+                        <button v-on:click="postId"> examiner </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -123,6 +123,12 @@ export default {
             } else {
                 console.log("vous allez etre redirigé")
             }
+        },
+
+       postId(id) {
+
+            console.log(id)
+            this.$router.push({ name: 'PostId', params: { id: id } })
         }
 
 

@@ -28,10 +28,10 @@ const routes = [
     component: Param
   },
   {
-    path: '/post/:post.id',
+    path: '/post/:id',
     name: 'PostId',
     component: PostId,
-    //props: postId
+    //params: id
   }
 ]
 
