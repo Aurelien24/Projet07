@@ -2,7 +2,14 @@
   <div class="param">
     <HeaderCo/>
     <div class="pas-connecter flex center bg-secondary"> 
-
+        <div class="post">
+            <div>
+                <p class="title"> Part : {{post.userId}}</p>
+                <p class="title"> {{post.createdAt}}</p>
+            </div>
+            <p>{{post.text}}</p>
+            <button v-on:click="postId"> examiner </button>
+        </div>
     </div>
   </div>
 </template>
@@ -15,6 +22,12 @@ export default {
     components: {
         HeaderCo
     },
+    data() {
+        return {
+            post : [],
+            coms : []
+        }
+    },
     mounted() {
 
         console.log(this.$route.params.id)
@@ -23,7 +36,7 @@ export default {
 
         let token = window.sessionStorage.token;
 
-        let option = {
+        let postOption = {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -31,11 +44,13 @@ export default {
             }
         }
 
-        let request = new Request ('http://localhost:3000/api/post/' + id)
+        let postRequest = new Request ('http://localhost:3000/api/post/' + id)
 
-        fetch(request, option)
+        fetch(postRequest, postOption)
             .then(response => response.json())
-                .then(data => this.posts=data)
+                .then(data => this.post=data)
+        
+        let comRequest = new Request ('http://localhost:3000/api/com/' + id)
     }
     // methods: {}
 }

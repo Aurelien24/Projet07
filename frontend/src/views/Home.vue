@@ -14,7 +14,6 @@
                         <input type="text" class="form-control" placeholder="Votre text" name="textMsg" id="textPost" required="true" v-model="textMsg"/>  <!-- required="false" avec image -->
                         <button type="submit">Poster</button>
                     </form>
-                   <!-- <router-link :to="{ path: 'post/', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" class="post"> -->
                     <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" class="post">
                         <div>
                             <p class="title"> Part : {{post.userId}}</p>
@@ -146,7 +145,7 @@ export default {
             .then(response => response.json())
                 .then(data => this.posts=data)
         } else {
-            console.log("vous allez etre redirigé")
+            this.$router.push('/login')
         }
     }
     //redirection() {
