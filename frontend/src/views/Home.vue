@@ -123,15 +123,7 @@ export default {
             } else {
                 console.log("vous allez etre redirigé")
             }
-        },
-
-       postId(id) {
-
-            console.log(id)
-            this.$router.push({ name: 'PostId', params: { id: id } })
         }
-
-
     },
     mounted() {
 
