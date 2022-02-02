@@ -14,7 +14,7 @@
                         <input type="text" class="form-control" placeholder="Votre text" name="textMsg" id="textPost" required="true" v-model="textMsg"/>  <!-- required="false" avec image -->
                         <button type="submit">Poster</button>
                     </form>
-                    <router-link to="/post/post.id" v-for="post in posts" v-bind:key="post.id" class="post">
+                    <router-link to="/post/:post.id" v-for="post in posts" v-bind:key="post.id" class="post">
                         <div  v-on:click="post(post.id)"  >
                             <div>
                                 <p class="title"> Part : {{post.userId}}</p>

@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Sign from '../views/Sign.vue'
 import Param from '../views/Param.vue'
+import PostId from '../views/PostId.vue'
 
 const routes = [
   {
@@ -25,53 +26,37 @@ const routes = [
     path: '/param',
     name: 'Param',
     component: Param
+  },
+  {
+    path: '/post/:post.id',
+    name: 'PostId',
+    component: PostId,
+    //props: postId
   }
 ]
-
-/* POUR LE ROUTES DYNAMIQUE
-
-const router = new VueRouter({
-  routes: [
-      // les parties dynamiques commencent par un deux-points
-      { path: '/item/:name', component: ItemDetail }
-  ]
-})*/
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
 
-
-
-//if (router.routes !== 'Login'){
-//  console.log(window.location)
-//}
-
 console.log(routes.path + ' bubu')
 
-//if(window.location == 'http://localhost:8080/#/'){ //window.location == 'http://localhost:8080/#/' router.routes == 'Home' router == 'Home' routes == 'Home'
+router.beforeEach((to, from, next) => {
+  if(window.sessionStorage.token){
 
-  //console.log(router.routes.path + 'bubu')
+    if ((to.name == 'Login' || to.name == 'Sign')) next({ name: 'Home' })
+    else next()
 
-  router.beforeEach((to, from, next) => {
-    if(window.sessionStorage.token){
+  } else {
 
-      if ((to.name == 'Login' || to.name == 'Sign')) next({ name: 'Home' })
-      else next()
+    if ((to.name !== 'Login' && to.name !== 'Sign')) next({ name: 'Login' }) 
+    else next()
+  }
+})
 
-    } else {
-
-      if ((to.name !== 'Login' && to.name !== 'Sign')) next({ name: 'Login' }) 
-      else next()
-    }
-  })
-
-//}
-
-//console.log(isAuthenticated)
-
-
-
+/*function postId (route) {
+  postId = post.id;
+}*/
 
 export default router
