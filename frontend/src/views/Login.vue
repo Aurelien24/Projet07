@@ -66,8 +66,6 @@ export default {
     
     login(){
 
-    let username = this.username;
-
     let data = {
       username: this.username,
       password: this.password
@@ -88,7 +86,7 @@ export default {
 
     fetch("http://localhost:3000/api/login", option)
       .then(response => response.json())
-        .then(tokenContenaire => sessionStorage.setItem('token', tokenContenaire.token), sessionStorage.setItem('username', username) ) // Problème : la réponse ne se récupère pas. [objet sans réponse] code : sessionStorage.setItem('token', response.token), console.log(this.response)
+        .then(tokenContenaire => sessionStorage.setItem('token', tokenContenaire.token)) // , sessionStorage.setItem('username', username Problème : la réponse ne se récupère pas. [objet sans réponse] code : sessionStorage.setItem('token', response.token), console.log(this.response)
           .then(() => this.$router.push('/'))
       .catch(err => console.log(`Erreur avec le message : ${err}`));
 

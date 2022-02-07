@@ -172,13 +172,15 @@ exports.changeEmail = (req, res, next) => {
 
 exports.user = (req, res, next) => {
 
-  const username = req.body.username;
+  const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
+  const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+  const id = decodedToken.userId;
 
-  console.log(username)
+  console.log(id)
 
   // risque de donner plus que l'utilisateur et le mail
 
-  db.user.findOne({ where: { username: username } })
+  db.user.findOne({ where: { id: id } })
     .then(data => res.status(200).json(data))
     .catch(() => res.status(500).json({ error: 'Utilisateur non trouvé !' }));
 }

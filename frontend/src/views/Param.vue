@@ -11,13 +11,13 @@
                 <div class="form-groupe flex">
                     <label for="nom">Votre nom :</label>
                     <div>
-                        <p>{{ name }}</p>
+                        <p>{{ user.username }}</p>
                     </div>
                 </div>
                 <div class="form-groupe flex">
                     <label for="nom">Votre email :</label>
                     <div>
-                        <p>{{ email }}</p>
+                        <p>{{ user.email }}</p>
                     </div>
                 </div>
                 <div class="form-groupe flex">
@@ -94,7 +94,7 @@ export default {
             passwordMDP: '',
             newPassword: '',
             newPassword2: '',
-            name: window.sessionStorage.username
+            user: []
         }
     },
     methods: {
@@ -186,7 +186,8 @@ export default {
         }
 
         fetch("http://localhost:3000/api/user", option)
-            .then(data => data.json())
+            .then(response => response.json())
+                .then(data => this.user=data)
             .catch(err => console.log(err))
     }
 }
