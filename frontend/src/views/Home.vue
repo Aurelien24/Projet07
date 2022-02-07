@@ -19,7 +19,7 @@
                     <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" class="post">
                         <div>
                             <p class="title"> Part : {{post.userId}}</p>
-                            <p class="title"> {{post.createdAt}}</p>
+                            <p class="title"> {{post.createdAt}}</p> <!-- Faire un formatage avec le forma Date() -> to local format -->
                         </div>
                         <img v-if="post.image != undifine" src="{{post.image}}"> <!-- J'ai un sérieux doute v-src ? Voir doc-->
                         <p>{{post.text}}</p>
@@ -58,7 +58,7 @@ export default {
 
             let data = {
                 text: this.textMsg,
-                image: this.imageMsg
+                image: this.imageMsg // regarder comment envoyer fichier avec fetch. Et pas en JSOn
             }
 
             let token = window.sessionStorage.token;

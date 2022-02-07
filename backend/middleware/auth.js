@@ -8,8 +8,9 @@ module.exports = (req, res, next) => {
 
     const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
     const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
-    const userId = decodedToken.id;
+    const userId = decodedToken.userId;
 
+    console.log(decodedToken)
     console.log(userId + " userId de auth.js")
 
 

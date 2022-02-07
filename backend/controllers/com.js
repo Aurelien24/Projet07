@@ -75,12 +75,12 @@ exports.allComOne = (req, res, next) => {
 
     // Ne fontionne pas, ont arrive pas ici !
 
-    let postId = req.params.id;
+    let postId = req.params.postId;
 
     console.log("ont passe part allComOne")
     console.log( postId )
     
-    db.post.findAll({ where: { postId: postId } })
+    db.com.findAll({ where: { postId: postId } }) // erreur ici
         .then((data) => res.status(200).json(data))
         .catch(error => res.status(400).json({ error }));
 }
