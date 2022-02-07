@@ -95,7 +95,7 @@ export default {
             newPassword: '',
             newPassword2: '',
             name: window.sessionStorage.username
-        }    
+        }
     },
     methods: {
         changeMail() {

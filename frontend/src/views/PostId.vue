@@ -8,7 +8,9 @@
                 <p class="title"> {{post.createdAt}}</p>
             </div>
             <p>{{post.text}}</p>
-            <button v-on:click="postId"> examiner </button>
+            <div class="coms">
+
+            </div>
         </div>
     </div>
   </div>
@@ -50,7 +52,22 @@ export default {
             .then(response => response.json())
                 .then(data => this.post=data)
         
-        let comRequest = new Request ('http://localhost:3000/api/com/' + id)
+        let comRequest = new Request ('http://localhost:3000/api/post/' + id + '/com')
+
+        //let data = {postId: id}
+
+        let comOption = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            },
+            //body: JSON.stringify(data) NE FONCTIONNE PAS SUR UN GET
+        }
+
+        fetch(comRequest, comOption)
+            .then(response => response.json())
+                .then(data => this.coms=data)
     }
     // methods: {}
 }

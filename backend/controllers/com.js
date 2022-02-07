@@ -71,5 +71,20 @@ exports.changeCom = (req, res, next) => {
     .catch(() => res.status(404).json({ error: 'Commentaire non trouvé !' }));
 };
 
+exports.allComOne = (req, res, next) => {
+
+    // Ne fontionne pas, ont arrive pas ici !
+
+    let postId = req.params.id;
+
+    console.log("ont passe part allComOne")
+    console.log( postId )
+    
+    db.post.findAll({ where: { postId: postId } })
+        .then((data) => res.status(200).json(data))
+        .catch(error => res.status(400).json({ error }));
+}
+
+
 
 // ajouter le find des commentaire d'un poste. VueJs doit le demander en début de cycle de vie quand il va afficher les poste.

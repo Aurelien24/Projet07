@@ -9,5 +9,6 @@ router.post('/post/:postId/com', auth, stuffCtrl.addCom);
 router.delete('/post/:postId/com/:id', auth, stuffCtrl.delCom);
 router.put('/post/:postId/com/:id', auth, stuffCtrl.changeCom);
 //router.det('/post/:id/com', stuffCtrl.changeCom);
+router.get('/post/:postId/com', auth, stuffCtrl.allComOne)
 
 module.exports = router;

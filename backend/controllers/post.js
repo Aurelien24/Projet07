@@ -20,6 +20,7 @@ exports.addPost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
     const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
     const userId = decodedToken.userId;
+    const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
     console.log(token)
     console.log(decodedToken)

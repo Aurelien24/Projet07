@@ -11,7 +11,9 @@
                 </div>
                 <div>
                     <form @submit.prevent="newPost">
-                        <input type="text" class="form-control" placeholder="Votre text" name="textMsg" id="textPost" required="true" v-model="textMsg"/>  <!-- required="false" avec image -->
+                        <input type="text" class="form-control" placeholder="Votre text" name="textMsg" id="textMsg" required="true" v-model="textMsg"/>  <!-- required="false" avec image -->
+                        <label for="myfile">Selectionne une image:</label>
+                        <input type="file" id="imageMsg" name="imageMsg" accept="image/png, image/jpeg">
                         <button type="submit">Poster</button>
                     </form>
                     <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" class="post">
@@ -19,6 +21,7 @@
                             <p class="title"> Part : {{post.userId}}</p>
                             <p class="title"> {{post.createdAt}}</p>
                         </div>
+                        <img v-if="post.image != undifine" src="{{post.image}}"> <!-- J'ai un sérieux doute v-src ? Voir doc-->
                         <p>{{post.text}}</p>
                         <button v-on:click="postId"> examiner </button>
                     </router-link>
@@ -44,7 +47,8 @@ export default {
     data() {
         return {
             posts : [],
-            textMsg : ''
+            textMsg : '',
+            imageMsg : ''
         }
     },
     methods: {
@@ -53,7 +57,8 @@ export default {
             console.log("le poste se crée")
 
             let data = {
-                text: this.textMsg
+                text: this.textMsg,
+                image: this.imageMsg
             }
 
             let token = window.sessionStorage.token;
