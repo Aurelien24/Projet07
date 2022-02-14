@@ -65,6 +65,7 @@ exports.login = (req, res, next) => {
           }
           res.status(200).json({
             userId: user.id,
+            admin: user.admin,
             token: jwt.sign(
               { userId: user.id },
               'Mon_TOKEN_developpement',
@@ -82,13 +83,12 @@ exports.changeMDP = (req, res, next) => {
 
   console.log("on passe part changeMDP !");
 
-  //  ALLERTE SéCURITé : const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
-  //  const userId = decodedToken.userId;
-  // Au lieu de username !
-  
-  const username = req.body.username;
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+  const id = decodedToken.userId;
 
-  db.user.findOne({ where: { username: username } })
+
+  db.user.findOne({ where: { id: id } })
   .then(user => {
     if (!user) {
       return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -114,15 +114,19 @@ exports.changeMDP = (req, res, next) => {
 
 exports.addImage = (req, res, next) => {
 
-  // Recherche l'utilisateur et ajoute une image
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+  const id = decodedToken.userId;
 
-  db.user.findOne({ email: req.body.email })
+  const image = req.body.image // je suppose que ce sera la
+
+  db.user.findOne({ id: id })
   .then(user => {
     if (!user) {
       return res.status(401).json({ error: 'Utilisateur non trouvé !' });
     }
     db.user.updateOne({image: image})
-      .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
+      .then(() => res.status(200).json({ message: 'Image mis a jour'}))
       .catch(error => res.status(400).json( error ));
   })
 };
@@ -135,32 +139,34 @@ exports.changeImage = (req, res, next) => {
   console.log("on passe part changeImage !");
   // Recherche l'utilisateur et ajoute une image
 
-  db.user.findOne({ email: req.body.email })
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+  const id = decodedToken.userId;
+
+  const image = req.body.image // je suppose que ce sera la
+
+  db.user.findOne({ id: id })
   .then(user => {
     if (!user) {
       return res.status(401).json({ error: 'Utilisateur non trouvé !' });
     }
     db.user.updateOne({image: image})
-      .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
+      .then(() => res.status(200).json({ message: 'Image mise a jour'}))
       .catch(error => res.status(400).json( error ));
   })
 };
 
 exports.changeEmail = (req, res, next) => {
 
-  // ALLERTE SéCURITé : const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
-  //  const userId = decodedToken.userId;
-  // Au lieu de username !
-
   console.log("on passe part changeEmail !");
 
-  const username = req.body.username;
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+  const id = decodedToken.userId;
+
   const email = req.body.newMail;
 
-  console.log(username);
-  console.log(email);
-
-  db.user.findOne({ where: { username: username } })
+  db.user.findOne({ where: { id: id } })
   .then(user => {
 
     db.user.update({email: email}, { where: { id: user.id } })
@@ -176,7 +182,7 @@ exports.user = (req, res, next) => {
   const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
   const id = decodedToken.userId;
 
-  console.log(id)
+  console.log(id) 
 
   // risque de donner plus que l'utilisateur et le mail
 

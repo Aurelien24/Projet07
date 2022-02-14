@@ -20,13 +20,14 @@ exports.addPost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
     const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
     const userId = decodedToken.userId;
+    const image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     //const image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
     console.log(token)
     console.log(decodedToken)
     console.log(userId + " seras l'user id")
 
-    db.post.create({text: req.body.text, userId: userId, userId: userId}) // image: image,
+    db.post.create({text: req.body.text, userId: userId, userId: userId, image: image}) // image: image,
         .then(newPost => res.status(201).json({ 'postId': newPost.id }))
         .catch(error => res.status(500).json({ error }));
 };

@@ -23,7 +23,7 @@
                 <div class="form-groupe flex">
                     <label for="nom">Votre image :</label>
                     <div>
-                        <p>{{ image }}</p>
+                        <p>{{ user.image }}</p>
                     </div>
                 </div>
             </form>

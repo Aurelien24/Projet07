@@ -19,11 +19,10 @@
                     <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" class="post">
                         <div>
                             <p class="title"> Part : {{post.userId}}</p>
-                            <p class="title"> {{post.createdAt}}</p> <!-- Faire un formatage avec le forma Date() -> to local format -->
+                            <p class="title">{{post.createdAt }}</p> <!-- Faire un formatage avec le forma Date() -> to local format -->
                         </div>
-                        <img v-if="post.image != undifine" src="{{post.image}}"> <!-- J'ai un sérieux doute v-src ? Voir doc-->
+                        <!-- <img v-if="post.image != undifine" src="{{post.image}}"> --><!-- J'ai un sérieux doute v-src ? Voir doc-->
                         <p>{{post.text}}</p>
-                        <button v-on:click="postId"> examiner </button>
                     </router-link>
                 </div>
             </div>
@@ -45,16 +44,21 @@ export default {
     },
     
     data() {
+        //let moment = require('moment')
         return {
+            
+
             posts : [],
             textMsg : '',
-            imageMsg : ''
+            imageMsg : '',
+           //dateTest : moment(posts.Object.createdAt).format('MMMM Do YYYY, h:mm:ss a')
         }
     },
     methods: {
-        newPost() {
+        newPost(post) {
 
             console.log("le poste se crée")
+            console.log(post.imageMsg)
 
             let data = {
                 text: this.textMsg,
@@ -127,10 +131,23 @@ export default {
             } else {
                 console.log("vous allez etre redirigé")
             }
+        },
+        date() {
+            let moment = require('moment');
+
+            //moment().format('MMMM Do YYYY, h:mm:ss a')
+            console.log(moment().format('MMMM Do YYYY, h:mm:ss a')) 
         }
     },
-    mounted() {
+    mounted() { 
 
+        let moment = require('moment');
+
+        let dateTest = moment().format('MMMM Do YYYY, h:mm:ss a')
+
+            //moment().format('MMMM Do YYYY, h:mm:ss a')
+        console.log(dateTest) 
+        
         console.log(window.sessionStorage.token) 
 
         let token = window.sessionStorage.token;
@@ -148,10 +165,28 @@ export default {
 
         fetch("http://localhost:3000/api/post", option)
             .then(response => response.json())
-                .then(data => this.posts=data)
+                .then(data => this.posts=data) 
+                
+                /*.then(data => {
+                    data.forEach(data.createdAt => {
+                        moment(post.updatedAt).format('MMMM Do YYYY, h:mm:ss a')
+                    });
+                })
+                   /*.then(posts => forEach(post => {
+                       console.log('bubu consol.log passe !') 
+                   });)
+                    // post.createdAt ==  moment(post.updatedAt).format('MMMM Do YYYY, h:mm:ss a')
+                    /*this.posts.forEach(post => {
+                        console.log(post)
+                        console.log('bubu consol.log passe !')
+                    });  //dateTest : moment(posts.Object.createdAt).format('MMMM Do YYYY, h:mm:ss a')*/
         } else {
             this.$router.push('/login')
         }
+
+        //posts.forEach(posts.date => let posts.newDate = moment().format('MMMM Do YYYY, h:mm:ss a'))
+ 
+        //console.log(data)
     }
     //redirection() {
     //  window.location = "/#/login"

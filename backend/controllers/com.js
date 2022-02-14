@@ -36,10 +36,12 @@ exports.addCom = (req, res, next) => {
 
 exports.delCom = (req, res, next) => {
 
+    const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
+    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+    const userId = decodedToken.userId;
+
     let postId = req.params.postId;
-    let id = req.params.id;
-    let userId = req.body.userId; // Ou peut être ailleur lol
-    let admin = req.body.admin;
+    let comId = req.params.id;
 
     db.com.findOne({
         where: { id: id }

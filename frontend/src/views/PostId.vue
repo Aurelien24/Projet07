@@ -8,9 +8,22 @@
                 <p class="title"> {{post.createdAt}}</p>
             </div>
             <p>{{post.text}}</p>
-            <div class="coms">
-
-            </div>
+            <button v-on:click="modifie" v-if="admin"> modifier </button>
+            <button v-on:click="modifie" v-else-if="userId == post.userId"> modifier </button>
+            <button v-on:click="modifie" v-if="admin"> supprimer </button>
+            <button v-on:click="modifie" v-else-if="userId == post.userId"> supprimer </button>
+        </div>
+        <div class="coms">
+            <router-link :to="{ name: 'ComId', params: { id: com.id }}" v-for="com in coms" v-bind:key="com.id" class="com">
+                <div>
+                    <p class="title"> Part : {{com.userId}}</p>
+                    <p class="title"> {{com.createdAt}}</p> <!-- Faire un formatage avec le forma Date() -> to local format -->
+                </div>
+                <p>{{com.text}}</p>
+                <button v-on:click="comId"> commenter </button>
+                <button v-on:click="comId" v-if="admin === true || userId == com.userId"> modifier </button>
+                <button v-on:click="comId" v-if="admin === true || userId == com.userId"> supprimer </button>
+            </router-link>
         </div>
     </div>
   </div>
@@ -27,11 +40,21 @@ export default {
     data() {
         return {
             post : [],
-            coms : []
+            coms : [],
+            userId : window.sessionStorage.id,
+            admin : window.sessionStorage.admin
+        }
+    },
+    methods: {
+    
+        modifie(){
+            console.log(this.userId)
+            console.log(this.admin)
         }
     },
     mounted() {
 
+        
         console.log(this.$route.params.id)
 
         let id = this.$route.params.id
