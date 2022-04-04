@@ -2,27 +2,33 @@
     <div class="home">
     <!-- Peut inclure les props-->
         <HeaderCo/>
-        <div class="pas-connecter flex center bg-secondary">
+        
+        <div class="bg-seize flex center bg-secondary-perso">
             <div class="connexion">
                 <div class="title">
                     <h1>Vous êtes "connecter"</h1>
-                    <button v-on:click="mesPost">Vos publications</button>
-                    <button v-on:click="allPost">Nouveauté</button>
+                    <div class="flex">
+                        <button v-on:click="mesPost" class="btn bg-primary-perso h5">Vos publications</button>
+                        <button v-on:click="allPost" class="btn bg-primary-perso h5">Nouveauté</button>
+                    </div>
                 </div>
                 <div>
                     <form @submit.prevent="newPost">
-                        <input type="text" class="form-control" placeholder="Votre text" name="textMsg" id="textMsg" required="true" v-model="textMsg"/>  <!-- required="false" avec image -->
-                        <label for="myfile">Selectionne une image:</label>
-                        <input type="file" id="imageMsg" name="imageMsg" accept="image/png, image/jpeg">
-                        <button type="submit">Poster</button>
+                        <textarea id="textMsg" name="textMsg" rows="5" cols="33" class="form-control" placeholder="Votre text" required="true" v-model="textMsg"> </textarea> <!-- required="false" avec image -->
+                        <!--<label for="myfile">Selectionne une image:</label>-->
+                        <!--<input type="file" id="imageMsg" name="imageMsg" accept="image/png, image/jpeg">-->
+                        <button type="submit" class="btn bg-primary-perso h5 mt-3">Poster</button>
                     </form>
-                    <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" class="post">
-                        <div>
-                            <p class="title"> Part : {{post.userId}}</p>
-                            <p class="title">{{post.createdAt }}</p> <!-- Faire un formatage avec le forma Date() -> to local format -->
+                    <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" >
+                        <div class="bg-secondary-perso border post">
+                            <div class="flex space-around">
+                                <p class="title"> Part : {{post.userId}}</p>
+                                <!--<p class="title">{{date(post.createdAt)}}</p> Faire un formatage avec le forma Date() -> to local format  date(post.createdAt) | dateFr -->
+                                <DateVue :date ="post.createdAt"/>
+                            </div>
+                            <!-- <img v-if="post.image != undifine" src="{{post.image}}"> --><!-- J'ai un sérieux doute v-src ? Voir doc-->
+                            <p>{{post.text}}</p>
                         </div>
-                        <!-- <img v-if="post.image != undifine" src="{{post.image}}"> --><!-- J'ai un sérieux doute v-src ? Voir doc-->
-                        <p>{{post.text}}</p>
                     </router-link>
                 </div>
             </div>
@@ -30,17 +36,21 @@
     </div>
 </template>
 
-<script>
+<script > // src="../assets/js/Date.js"
 // @ is an alias to /src             setTimeout(() => {this.posts=data}, 5000)
 import HeaderCo from '@/components/HeaderCo.vue'
-
+//import Date from '@/components/Date.vue' Ex ligne pour le component
+//import * as Date from '../assets/js/Date.js'
+import DateVue from '@/components/DateVue.vue'
+//import Bootstap from '@/components/DateVue.vue'
 // import router from '@/router/index.js'
 
 
 export default {
     name: 'Home',
     components: {
-    HeaderCo
+    HeaderCo,
+    DateVue
     },
     
     data() {
@@ -48,10 +58,10 @@ export default {
         return {
             
 
-            posts : [],
+            posts : [],  
             textMsg : '',
             imageMsg : '',
-           //dateTest : moment(posts.Object.createdAt).format('MMMM Do YYYY, h:mm:ss a')
+           //dateTest : moment(posts.Object.createdAt).format('MMMM Do YYYY, h:mm:ss a')   
         }
     },
     methods: {
@@ -77,7 +87,6 @@ export default {
                 body: JSON.stringify(data)//body: JSON.stringify(data) -> récupe la variable data du dessus et non le data()
             }
 
-            //if(textPost.length >= 12){ // textMsg ne fonctionne pas non plus
             fetch("http://localhost:3000/api/post", option)
                 .then((response) => response.json()) // , this.$router.push('/#') ne fonctionne pas pour refresh
                 .catch(() => alert("Une erreur est survenu"))
@@ -131,12 +140,6 @@ export default {
             } else {
                 console.log("vous allez etre redirigé")
             }
-        },
-        date() {
-            let moment = require('moment');
-
-            //moment().format('MMMM Do YYYY, h:mm:ss a')
-            console.log(moment().format('MMMM Do YYYY, h:mm:ss a')) 
         }
     },
     mounted() { 
@@ -198,19 +201,32 @@ export default {
 
 <style lang="scss">
 // h1 seize ?
-.pas-connecter {
-    width: 100%;
-    height: calc(100vh - 60px);
-}
-.post {
+
+.border {
     margin-top: 15px;
     padding: 5px;
     //border: 1px, solid, black;
-    border: solid;
+    border: medium solid black;;
 
     .title {
         text-align: left;
         margin-top: 5px;
+    }
+}
+
+@media (min-width: 700px) {
+    .post {
+        width: 600px;
+    }
+}
+@media (min-width: 1000px) {
+    .post {
+        width: 800px;
+    }
+}
+@media (min-width: 1200px) {
+    .post {
+        width: 1000px;
     }
 }
 </style>

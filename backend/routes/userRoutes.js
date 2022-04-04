@@ -3,7 +3,7 @@ const router = express.Router();
 
 const stuffCtrl = require('../controllers/user');
 const mdp = require('../middleware/passeword');
-const mail = require('../middleware/mail');
+const mail = require('../middleware/mail');  
 const auth = require('../middleware/auth');
 
 // Utilisateur
@@ -16,4 +16,4 @@ router.put('/changeImage', stuffCtrl.changeImage);
 router.put('/changeEmail', auth, stuffCtrl.changeEmail);
 router.get('/user', auth, stuffCtrl.user);
 
-module.exports = router;
+module.exports = router; 

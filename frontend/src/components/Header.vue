@@ -10,7 +10,7 @@ export default {
  -->
 <template>
 	
-    <header class="header flex couleur-principal bg-primary">
+    <header class="header flex couleur-principal bg-primary-perso">
         <nav class="flex space-around">
             <router-link to="/" class="h3">Accueil</router-link>
             <router-link to="/login" class="h3">Connexion</router-link>

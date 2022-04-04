@@ -2,7 +2,7 @@
   <div class="sign">
     <!-- POURQUOI ???? Mettre des messages innutil ???-->
     <Header/>
-    <div class="pas-connecter flex center bg-secondary">
+    <div class="bg-seize flex center bg-secondary-perso">
 		<div class="connexion">
             <div class="title">
                 <h1>Veuiller vous inscrire</h1>
@@ -26,7 +26,7 @@
                         <input type="password" class="form-control" placeholder="******" name="password2" required="true" v-model="password2"/>
                     </div>
                     <div class="button flex">
-                        <button v-on:click="sign()" class="bg-primary h5" type="submit">Connexion</button>
+                        <button v-on:click="sign()" class="bg-primary-perso h5" type="submit">Connexion</button>
                     </div>
                 </form>
             </div>

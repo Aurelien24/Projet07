@@ -5,11 +5,11 @@
  -->
 <template>
 	
-    <header class="header flex couleur-principal bg-primary">
+    <header class="header flex couleur-principal bg-primary-perso">
         <nav class="flex space-around">
             <router-link to="/" class="h3">Accueil</router-link> 
             <router-link to="/param" class="h3">Profil</router-link>
-            <button v-on:click="deco">Déconexion</button>
+            <router-link to="/login" class="h3" v-on:click="deco">Déconexion</router-link>
         </nav>
     </header>
 </template>

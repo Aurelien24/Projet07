@@ -4,40 +4,54 @@
 
 <style lang="scss">
 
+// Couleur
+// fond header
+$bg-primary : #6dc9f0;
+// fond corps de page
+$bg-secondary : #F0F2F5;
+//$bg-tertiary : #dee0e4ee;
+$couleurSecondair : #107761;
+$policePrincipal : black;
+
 
 #nav {
   padding: 30px;
 
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: $policePrincipal;
 
-    &.router-link-exact-active {
-      color: #107761;
-    }
+    //&.router-link-exact-active {
+    //  color: #107761;
+    //}
   }
 }
-</style>
-
-<style lang="scss">
 
 body{
   margin:0px;
 }
 
 // gestion des couleurs
-.bg-primary {
-  background-color: #6dc9f0;
+.bg-primary-perso {
+  background-color: $bg-primary;
 }
-.bg-secondary {
-  background-color: #F0F2F5;
+.bg-secondary-perso {
+  background-color: $bg-secondary;
 }
+//.bg-tertiary {
+//  background-color: $bg-tertiary;
+//}
 a:hover {
-  color: #107761;
+  color: $couleurSecondair;
 }
 p, a {
-  color: black;
+  color: $policePrincipal;
 } 
+// taille du fond
+.bg-seize{
+  width: 100%;
+  min-height: calc(100vh - 60px);
+}
 // gestion des liens
 a 
 {
@@ -78,6 +92,7 @@ textarea {
 .center{
   justify-content: center;
 }
+
 // Anti répétition
 nav, button, .connexion {
   margin: auto;
@@ -96,6 +111,6 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: $policePrincipal;
 }
 </style>

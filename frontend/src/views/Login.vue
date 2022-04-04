@@ -2,7 +2,7 @@
   <div class="login">
     <!-- POURQUOI ???? Mettre des messages innutil ???-->
     <Header/>
-    <div class="pas-connecter flex center bg-secondary">
+    <div class="bg-seize flex center bg-secondary-perso">
       <div class="connexion">
         <div class="title">
         <h1>Veuiller vous connecter</h1>
@@ -18,7 +18,7 @@
               <input type="password" class="form-control" placeholder="******" name="password" id="nom" required="true" v-model="password"/>
             </div>
             <div class="button flex">
-              <button class="bg-primary h5" type="submit">Connexion</button>
+              <button class="bg-primary-perso h5" type="submit">Connexion</button>
             </div>
           </form>
         </div>

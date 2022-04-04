@@ -87,6 +87,4 @@ exports.allComOne = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 }
 
-
-
 // ajouter le find des commentaire d'un poste. VueJs doit le demander en début de cycle de vie quand il va afficher les poste.
