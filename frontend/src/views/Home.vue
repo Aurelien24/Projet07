@@ -22,7 +22,7 @@
                     <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" >
                         <div class="bg-secondary-perso border post">
                             <div class="flex space-around">
-                                <p class="title"> Part : {{post.userId}}</p>
+                                <p class="title"> Part : {{post.userName}}</p>
                                 <!--<p class="title">{{date(post.createdAt)}}</p> Faire un formatage avec le forma Date() -> to local format  date(post.createdAt) | dateFr -->
                                 <DateVue :date ="post.createdAt"/>
                             </div>
@@ -89,7 +89,7 @@ export default {
 
             fetch("http://localhost:3000/api/post", option)
                 .then((response) => response.json()) // , this.$router.push('/#') ne fonctionne pas pour refresh
-                .catch(() => alert("Une erreur est survenu"))
+                .catch(() => alert("Une erreur est survenu"));
             //} 
         },
 
@@ -144,18 +144,8 @@ export default {
     },
     mounted() { 
 
-        let moment = require('moment');
-
-        let dateTest = moment().format('MMMM Do YYYY, h:mm:ss a')
-
-            //moment().format('MMMM Do YYYY, h:mm:ss a')
-        console.log(dateTest) 
-        
-        console.log(window.sessionStorage.token) 
-
         let token = window.sessionStorage.token;
 
-        console.log("bonjour");
         if(window.sessionStorage.token){
 
         let option = {

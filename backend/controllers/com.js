@@ -3,6 +3,7 @@ const db = require('../models'); // cherche d'office index.js
 const user = require('../models/user');
 const com = require('../models/com');
 const { text } = require('body-parser');
+const jwt = require('jsonwebtoken');
 
 
 /*
@@ -19,6 +20,7 @@ DELETE /posts/1/comments/2
 // NE PREND PAS LES PHOTOS !!!
 exports.addCom = (req, res, next) => {
 
+    /* Technique d'origine : Ne prend pas le nom d'utilisateur
     let text = req.body.text;
     let userId = req.body.userId;
     let postId = req.params.postId;
@@ -32,6 +34,22 @@ exports.addCom = (req, res, next) => {
     })
     .then(newCom => res.status(201).json({ 'postId': newCom.id }))
     .catch(error => res.status(500).json({ error }));
+    */
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+    const userId = decodedToken.userId;
+
+    let text = req.body.text;
+    let postId = req.params.postId;
+
+    db.user.findOne({ where: { id: userId } })
+        .then(user => {
+            db.com.create({userId: userId, text: text, postId:postId, userName: user.username}) // ...imageObjet pour ne pas faire les valeur 1/1
+                .then(newCom => res.status(201).json({ 'comId': newCom.id }))
+                .catch(error => res.status(500).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
 };
 
 exports.delCom = (req, res, next) => {
@@ -47,7 +65,6 @@ exports.delCom = (req, res, next) => {
         where: { id: id }
     })
     .then(com => {
-        console.log("coucou")
         com.destroy() // Erreur ?
             .then(() => res.status(201).json({ message: 'post supprimer' }))
             .catch(error => res.status(400).json({ error }));
@@ -62,7 +79,6 @@ exports.changeCom = (req, res, next) => {
     let text = req.body.text
     db.com.findOne({ where: { id: id } })
     .then(com => {
-        console.log("recherche faite", com)
         if (com == null){
             return res.status(404).json({ message : 'Commentaire non trouvé'}) // a faire sur les autres + vérifier l'url (postId)
         }
@@ -78,9 +94,6 @@ exports.allComOne = (req, res, next) => {
     // Ne fontionne pas, ont arrive pas ici !
 
     let postId = req.params.postId;
-
-    console.log("ont passe part allComOne")
-    console.log( postId )
     
     db.com.findAll({ where: { postId: postId } }) // erreur ici
         .then((data) => res.status(200).json(data))

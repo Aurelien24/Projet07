@@ -4,7 +4,7 @@
     <div class="bg-seize flex center bg-secondary-perso"> 
         <div class="post">
             <div>
-                <p class="title"> Part : {{post.userId}}</p>
+                <p class="title"> Part : {{post.userName}}</p>
                 <DateVue :date ="post.createdAt"/>
             </div>
             <p>{{post.text}}</p>
@@ -34,7 +34,7 @@
             <!--<router-link :to="{ name: 'ComId', params: { id: com.id }}" v-for="com in coms" v-bind:key="com.id" class="com">   Faire route ComId--> 
                 <div v-for="com in coms" v-bind:key="com.id" class="com">
                     <div class="flex space-around">
-                        <p class="title"> Part : {{com.userId}}</p>
+                        <p class="title"> Part : {{com.userName}}</p>
                         <!--<p class="title">{{date(post.createdAt)}}</p> Faire un formatage avec le forma Date() -> to local format  date(post.createdAt) | dateFr -->
                         <DateVue :date ="com.createdAt"/>
                     </div>

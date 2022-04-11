@@ -8,7 +8,7 @@
                 <h1>Veuiller vous inscrire</h1>
             </div>
             <div class="formulaire">
-                <form>
+                <form @submit.prevent="sign">
                     <div class="form-groupe flex">
                         <label for="nom">Votre nom :</label>
                         <input type="text" class="form-control" placeholder="Jean" name="username" required="true" v-model="username"/>
@@ -26,7 +26,7 @@
                         <input type="password" class="form-control" placeholder="******" name="password2" required="true" v-model="password2"/>
                     </div>
                     <div class="button flex">
-                        <button v-on:click="sign()" class="bg-primary-perso h5" type="submit">Connexion</button>
+                        <button class="bg-primary-perso h5" type="submit">Connexion</button>
                     </div>
                 </form>
             </div>
@@ -56,30 +56,60 @@ export default {
     }
   },
   methods: {
-    // ne se lance pas avec le : async
+    
     sign(){
 
-    let data = {
-      username: this.username,
-      password: this.password,
-      password2: this.password2,
-      email: this.email
-    }
+      let data = {
+        username: this.username,
+        password: this.password,
+        password2: this.password2,
+        email: this.email
+      }
 
-    let option = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    }
+      let option = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      }
 
-    console.log("Le fetch d'inscription va se lancer!")
+      console.log("Le fetch d'inscription va se lancer!")
 
-    fetch("http://localhost:3000/api/signup", option)
-      .then(() => console.log("compte crée")) // Problème : la réponse ne se récupère pas. [objet sans réponse] code : sessionStorage.setItem('token', response.token), console.log(this.response)
-      .catch(err => console.log(`Erreur avec le message : ${err}`));
+      console.log(this.username)
+      fetch("http://localhost:3000/api/signup", option)
+        .then((data) => console.log(data)) 
+        .catch(err => console.log(`Erreur avec le message : ${err}`));
+    },
+    login(){
+
+      let data = {
+        username: this.username,
+        password: this.password
+      }
+
+      let option = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)//body: JSON.stringify(data) -> récupe la variable data du dessus et non le data()
+      }
+
+      fetch("http://localhost:3000/api/login", option)
+        .then(response => response.json())
+
+          .then(tokenContenaire => {
+            sessionStorage.setItem('token', tokenContenaire.token)
+            sessionStorage.setItem('id', tokenContenaire.userId)
+            sessionStorage.setItem('admin', tokenContenaire.admin)
+          })//, sessionStorage.setItem('id', tokenContenaire.userId)) //, sessionStorage.setItem('admin', tokenContenaire.admin)) // , sessionStorage.setItem('username', username Problème : la réponse ne se récupère pas. [objet sans réponse] code : sessionStorage.setItem('token', response.token), console.log(this.response)
+            .then(() => this.$router.push('/'))
+        .catch(err => console.log(`Erreur avec le message : ${err}`));
+
+        // réupérer event puis -> event prévenent default avec vueJs : 
 
     }
   }

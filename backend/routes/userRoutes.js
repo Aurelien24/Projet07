@@ -15,5 +15,6 @@ router.put('/changeImage', stuffCtrl.changeImage);
 //router.get('/connecter', auth.connecter) // route de vérification de connexion ? Pour quand les token expire ?
 router.put('/changeEmail', auth, stuffCtrl.changeEmail);
 router.get('/user', auth, stuffCtrl.user);
+router.delete('/suprCompte', auth, stuffCtrl.suprCompte)
 
 module.exports = router; 

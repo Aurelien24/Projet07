@@ -30,11 +30,8 @@
                             <p>{{ user.image }}</p>
                         </div>
                     </div>
-                    <div class="form-groupe flex">
-                        <label for="suppr">Suppression compte :</label>
-                        <div>
-                            <p>{{ user.image }}</p>
-                        </div>
+                    <div>
+                        <button v-on:click="delCompte" class="btn bg-primary-perso h5">Suppression compte</button>
                     </div>
                 </div>
                 <div class="col-sm-4 col-12"> <!-- A mettre dans un components ? Ou le gérer ici. Au choix. -->
@@ -177,6 +174,33 @@ export default {
                     .then(response => response.json())
                     .catch(err => console.log(`Erreur avec le message : ${err}`));
             }
+        },
+        delCompte() {
+
+            let mdp = prompt("Etes vous sur de vouloir supprimer votre compte ? Toute suppression est déffinitive. Veuillez entrer votre mot de passe pour confirmer.")
+            
+            if(mdp != null){
+                let data = {
+                    password: mdp
+                }
+
+                let token = window.sessionStorage.token;
+
+                let option = {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(data)
+                }
+                console.log(" Le compte sera supprimé")
+                
+                fetch("http://localhost:3000/api/suprCompte", option)
+                    .then(response => response.json())
+                    .catch(err => console.log(`Erreur avec le message : ${err}`));
+            }
         }
     },
     mounted() {
@@ -203,19 +227,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-// Fait se mettre en 3 colone sur grand écran
-
-// Provoque une erreur !
-/*
-    #3to1Column{
-        flex-direction : row;
-    }
-    @media (min-width: 1000px) {
-        #3to1Column{
-            flex-direction : column;
-        }
-    }*/
-    
-</style>
