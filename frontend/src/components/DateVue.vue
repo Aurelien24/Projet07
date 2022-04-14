@@ -29,7 +29,6 @@ export default {
     },
     computed: {
         formatDate () {
-            console.log(this.date)
 
             return moment(this.date).startOf(this.date).fromNow();
         }

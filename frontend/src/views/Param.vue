@@ -195,10 +195,19 @@ export default {
                     },
                     body: JSON.stringify(data)
                 }
-                console.log(" Le compte sera supprimé")
                 
                 fetch("http://localhost:3000/api/suprCompte", option)
-                    .then(response => response.json())
+                    .then(response => {
+                        
+                        if(response.status == 200) {
+                            sessionStorage.clear()
+                            this.$router.push('/login')
+                        }else{
+                            response.json()
+                                .then(responseJSON => {
+                                    alert(responseJSON.message)
+                                })
+                        }})
                     .catch(err => console.log(`Erreur avec le message : ${err}`));
             }
         }

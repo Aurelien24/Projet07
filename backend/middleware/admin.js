@@ -1,4 +1,3 @@
-const User = require('../models/user');
 const db = require('../models'); // cherche d'office index.js
 const jwt = require('jsonwebtoken');
 
@@ -11,7 +10,10 @@ module.exports = (req, res, next) => {
     const comId = req.params.comId;
 
   console.log("Le middleware admin est lancer")
-        
+
+  console.log("userId : " + id + ", postId : " + postId + ", comId : " + comId)
+
+
   db.user.findOne({
     where: { id: id }
   })
@@ -32,3 +34,46 @@ module.exports = (req, res, next) => {
   })
   .catch(error => res.status(500).json({ error }));
 }
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+        
+  db.user.findOne({
+    where: { id: id }
+  })
+  .then((user) => {
+    console.log("user.admin = " + user.admin)
+    console.log("user.id = " + user.id)
+
+    let userId = user.id;
+    // Le if ne fonctionne pas. == essayer || est bien ou.
+    if (user.admin == "true") {
+      console.log("Admin détecter")
+    } else if (comId != undifind) {
+      console.log("ont cherche le commentaire")
+      db.com.findOne({
+        where: {id : comId}
+      })
+        .then((com) => {
+          console.log("Com récupérer")
+          if(userId === com.id){
+            next();
+          }
+        })
+    } else {
+        console.log("Echec d'autorisation des droits administrateur de la requette")
+        return;
+    }
+  })
+  .catch(() => res.status(500).json({ message : "erreur interne, utilisateur non trouvé dans la base de donée " }));
+}*/

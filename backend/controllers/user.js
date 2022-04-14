@@ -43,7 +43,17 @@ exports.signup = (req, res, next) => {
               password: hash,
               admin: "false"
             })
-            .then(newUser => res.status(201).json({ 'userId': newUser.id }))
+            .then(newUser => {
+              res.status(200).json({
+                userId: newUser.id,
+                admin: newUser.admin,
+                token: jwt.sign(
+                  { userId: newUser.id },
+                  'Mon_TOKEN_developpement',
+                  { expiresIn: '24h' }
+                )
+              });
+            })
             .catch(error => res.status(500).json({ error }));
           })
           .catch(error => res.status(500).json({ error }));
@@ -204,14 +214,16 @@ exports.suprCompte = (req, res, next) => {
   db.user.findOne({ where: { id: id } })
     .then(user => { 
       if (!user) {
-        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+        return res.status(401).json({ message: 'Utilisateur non trouvé !' });
       }
       bcrypt.compare(req.body.password, user.password)
         .then(valid => {
           if (!valid) {
-            return res.status(401).json({ error: 'Mot de passe incorrect !' });
+            return res.status(401).json({ message: 'Mot de passe incorrect !' });
           } else {
             console.log("suppression parti ! -> manque un db backend pour finir.")
+            db.user.destroy({ where: { id: id } })
+              .then(() => res.status(200).json({ message : 'Utilisateur supprimé'})) //Pas de return après supr ?
           }
         })
         .catch(error => res.status(500).json({ error }));

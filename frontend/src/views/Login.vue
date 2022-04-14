@@ -88,38 +88,32 @@ export default {
     console.log("Le fetch de connexion va se lancer!")
 
     fetch("http://localhost:3000/api/login", option)
-        .then(response => response.json())
-          .then(tokennContenaire => {
-            
-            console.log(tokennContenaire)
-            sessionStorage.setItem('token', tokennContenaire.token)
-            sessionStorage.setItem('id', tokennContenaire.userId)
-            sessionStorage.setItem('admin', tokennContenaire.admin)
-          })//, sessionStorage.setItem('id', tokenContenaire.userId)) //, sessionStorage.setItem('admin', tokenContenaire.admin)) // , sessionStorage.setItem('username', username Problème : la réponse ne se récupère pas. [objet sans réponse] code : sessionStorage.setItem('token', response.token), console.log(this.response)
-            .then(() => this.$router.push('/'))
-        .catch(err => console.log(`Erreur avec le message : ${err}`));
-
-        /*
-
-    fetch("http://localhost:3000/api/login", option)
       .then(response => {
-        response.json()
+        console.log(response)
         if(response.status == 200) {
-          console.log(response.token)
-          sessionStorage.setItem('token', response.token)
-          sessionStorage.setItem('id', response.userId)
-          sessionStorage.setItem('admin', response.admin)
-          //.then(() => this.$router.push('/')))
-        } else {
-            const p = document.getElementById("erreur")
-            console.log(response)
-            p.innerText = response.error
+        response.json()
+          
+          .then(responseJson => {
+            //console.log(response.token)
+            sessionStorage.setItem('token', responseJson.token)
+            sessionStorage.setItem('id', responseJson.userId)
+            sessionStorage.setItem('admin', responseJson.admin)
+            this.$router.push('/')
+          })
+        }else{
+            response.json()
+              .then(responseJson => {
+                const p = document.getElementById("erreur")
+                console.log(responseJson)
+                p.innerText = responseJson.error
+              })
+            
         }
       })
       .catch(err => console.log(`Erreur avec le message : ${err}`));
 
       // réupérer event puis -> event prévenent default avec vueJs : 
-*/
+
     }
   }
 }

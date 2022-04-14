@@ -203,20 +203,4 @@ export default {
         margin-top: 5px;
     }
 }
-
-@media (min-width: 700px) {
-    .post {
-        width: 600px;
-    }
-}
-@media (min-width: 1000px) {
-    .post {
-        width: 800px;
-    }
-}
-@media (min-width: 1200px) {
-    .post {
-        width: 1000px;
-    }
-}
 </style>
