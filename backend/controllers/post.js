@@ -1,87 +1,114 @@
-const Post = require('../models/post');
 const db = require('../models'); // cherche d'office index.js
-const user = require('../models/user');
 
+const { text } = require('body-parser');
+const jwt = require('jsonwebtoken');
+const com = require('../models/com.js');
+const user = require('../models/user.js')
+
+// Prendre /post -> Renvoit les postes (mur sans fin)
+
+// prendre /post
+
+/*GET /posts -> récup tout les post
+POST /posts - crée un post
+GET /posts/1 -> obtien 1 post
+PATCH|PUT /posts/1 -> modif un post
+DELETE /posts/1 -> supprime un post
+*/
 
 // NE PREND PAS LES PHOTOS !!!
 exports.addPost = (req, res, next) => {
 
-    db.post.create({text: req.body.text})
+    /* Ajout sans pseudo
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+    const userId = decodedToken.userId;
+ 
+    // futur intégration d'image -> erreur car image n'est pas trouver si il n'y as pas a trouver d'image. Il faudra un if
+    //const image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+
+    console.log(userId)
+    //image.save()
+    //    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
+    //   .catch(error => res.status(400).json({ error }));
+    //  imageURL: image
+    db.post.create({userId: userId, text: req.body.text, }) // ...imageObjet pour ne pas faire les valeur 1/1
         .then(newPost => res.status(201).json({ 'postId': newPost.id }))
+        .catch(error => res.status(500).json({ error })); 
+    */
+
+    // Ajout avec pseudo
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+    const userId = decodedToken.userId;
+
+    db.user.findOne({ where: { id: userId } })
+        .then(user => {
+            db.post.create({userId: userId, text: req.body.text, userName: user.username}) // ...imageObjet pour ne pas faire les valeur 1/1
+                .then(newPost => res.status(201).json({ 'postId': newPost.id }))
+                .catch(error => res.status(500).json({ error }));
+        })
         .catch(error => res.status(500).json({ error }));
 };
 
 exports.delPost = (req, res, next) => {
 
-    let id = req.body.id;
-    let userId = req.body.userId; // Ou peut être ailleur lol
+    let id = req.params.postId;
 
     db.post.findOne({
         where: { id: id }
     })
-    .then(post => {
-        console.log("coucou")
+        .then(post => {
+            post.destroy() // Erreur ?
 
-        // MANQUE UNE VÉRIFICATION DU ID DE L'UTILISATEUR
-        //if(post.userId == userId){}
-
-        // Peut se faire en lien avec auth ? Sans passé directement part userId. userId peut donner une info aux hacker
-
-        // Cahnger pour avoir une adresse comme /post/:id du post  et changer le verbe HTTP pour la modification (postman)
-        post.destroy() // Erreur ?
-            .then(() => res.status(201).json({ message: 'post supprimer' }))
-            .catch(error => res.status(400).json({ error }));
-    })
-    .catch(() => res.status(401).json({ error: 'Post non trouvé !' }));
+                .then (res.status(201).json({ message: 'post supprimer' }))
+                .catch(error => res.status(400).json({ error }));
+        })
+        .catch(() => res.status(404).json({ error: 'Post non trouvé !' }));     
 };
 
 exports.changePost = (req, res, next) => {
 
-    const post = new Post({
-        text: req.body.text,
-        image: req.body.image
-    });
-
-    Post.UpdateOne() // Erreur ?
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-};
-
-exports.addCom = (req, res, next) => {
-
-    const com = new Com({
-        text: req.body.text
-    });
-
-    com.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-};
-
-exports.delCom = (req, res, next) => {
-
-   Post.findOne({id:id})
+    let id = req.params.postId;
+    let text = req.body.text
+    db.post.findOne({ where: { id: id } })
     .then(post => {
-        if (!post) {
-          return res.status(401).json({ error: 'Post non trouvé !' });
-        }
-        Post.delet() // Erreur ?
-            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch(error => res.status(400).json({ error }));
+        db.post.update({text: text}, { where: { id: id } }) // Erreur ?
+            .then(() => res.status(201).json({ message: 'Post changer' }))
+            .catch(() => res.status(400).json({ error: 'Post non mis a jour !' }));
     })
-    .catch(error => res.status(400).json({ error }));
+    .catch(() => res.status(404).json({ error: 'Utilisateur non trouvé !' }));
 };
 
-exports.changeCom = (req, res, next) => {
+exports.allPost = (req, res, next) => {
+    db.post.findAll({ order: [
+        ['updatedAt', 'DESC'],
+    ]})
+        .then((data) => res.status(200).json(data))
+        .catch(error => res.status(400).json({ error }));
+}
 
-    Post.findOne({id:id})
-    .then(post => {
-        if (!post) {
-          return res.status(401).json({ error: 'Post non trouvé !' });
-        }
-        Post.UpdateOne() // Erreur ?
-            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(400).json({ error }));
-};
+exports.mesPost = (req, res, next) => {
+
+    // SUPPOSER Récupérer id utilisateur NE FONCTIONNE PAS !!
+    const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
+    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
+    const id = decodedToken.userId;
+
+    db.post.findAll({ where: { userId: id },
+        order: [ ['updatedAt', 'DESC'],
+    ]})
+        .then((data) => res.status(200).json(data))
+        .catch(error => res.status(400).json({ error }));
+}
+
+exports.onePost = (req, res, next) => {
+    let id = req.params.postId;
+    
+    db.post.findOne({ where: { id: id } })
+        .then((data) => res.status(200).json(data))
+        .catch(error => res.status(400).json({ error }));
+}
+
+// Ajouter la demande de post. 

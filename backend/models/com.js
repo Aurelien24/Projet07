@@ -1,15 +1,9 @@
 const { DataTypes, Model } = require('sequelize');
-const { post } = require('.');
 
-// ... peut évité de le recopier txt:req.body.txt
-module.exports = (sequelize, Sequelize) => sequelize.define("post", {
+module.exports = (sequelize, Sequelize) => sequelize.define("com", {
   text: {
     type: DataTypes.STRING,
     allowNull: false
-  },
-  imageURL: {
-    type: DataTypes.STRING,
-    allowNull: true
   },
   userName: {
     type: DataTypes.STRING,
@@ -23,5 +17,6 @@ module.exports = (sequelize, Sequelize) => sequelize.define("post", {
   }
 }, {
   sequelize, 
-  modelName: 'post' 
+  modelName: 'com' 
+  
 });
