@@ -17,63 +17,47 @@ module.exports = (req, res, next) => {
   db.user.findOne({
     where: { id: id }
   })
-  .then(function(user){
-    console.log("user.admin = " + user.admin)
-    console.log("user.id = " + user.id)
-    // Le if ne fonctionne pas. == essayer || est bien ou.
-    if (user.admin == "true") {
-      console.log("Admin détecter")
-    }
-    if (user.admin === "true" || user.id === postId || user.id === comId) { // /!\ Laisse l'utilisateur supprimer n'importe quel commentaire sur un post qu'il as crée.
-      console.log("Vérification du middleware admin obtenu")
-      next();
-    } else {
-        console.log("Echec d'autorisation des droits administrateur de la requette")
-        return;
-    }
-  })
-  .catch(error => res.status(500).json({ error }));
-}
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-        
-  db.user.findOne({
-    where: { id: id }
-  })
   .then((user) => {
     console.log("user.admin = " + user.admin)
     console.log("user.id = " + user.id)
 
-    let userId = user.id;
-    // Le if ne fonctionne pas. == essayer || est bien ou.
+    // teste si l'utilisateur est un admin :
     if (user.admin == "true") {
       console.log("Admin détecter")
-    } else if (comId != undifind) {
-      console.log("ont cherche le commentaire")
+      next();
+
+    // teste si l'utilisateur modifie/supprime un commentaire :
+    } else if (comId != undefined){
       db.com.findOne({
-        where: {id : comId}
+        where: {id: comId}
       })
-        .then((com) => {
-          console.log("Com récupérer")
-          if(userId === com.id){
-            next();
-          }
-        })
+      .then((com) => {
+        // Cause un bug sur les suppréssion de commentaire : "id is not defined" et renvoit une 500
+        if (id == com.userId){
+          console.log("requete autorisé")
+          next();
+        } else {
+          return res.status(401).json({ message : "Vous n'êtes pas autorisé a éffectuer cette action"});
+        }
+      })
+    // Puisque l'utilisateur ne touche pas a un commentaire, ce doit être un post
+    } else if (postId != undefined){
+      db.post.findOne({
+        where: {id: postId}
+      })
+      .then((post) => {
+        // Cause un bug sur les suppréssion de post : "Error: WHERE parameter "id" has invalid "undefined" value" et renvoit une 500
+        if (id == post.userId){
+          console.log("requete autorisé")
+          next();
+        } else {
+          return res.status(401).json({ message : "Vous n'êtes pas autorisé a éffectuer cette action"});
+        }
+      })
+    // Puisque l'utilisateur ne touche ni a un commentaire, ni a un post il y as un problème !
     } else {
-        console.log("Echec d'autorisation des droits administrateur de la requette")
-        return;
+        return res.status(401).json({ message : "Echec d'autorisation des droits administrateur de la requette"});
     }
   })
-  .catch(() => res.status(500).json({ message : "erreur interne, utilisateur non trouvé dans la base de donée " }));
-}*/
+  .catch(error => res.status(500).json({ error }));
+}

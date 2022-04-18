@@ -6,17 +6,16 @@
 <template>
 	
     <header class="header flex couleur-principal bg-primary-perso">
-        <nav class="flex space-around">
-            <router-link to="/" class="h3">Accueil</router-link> 
-            <router-link to="/param" class="h3">Profil</router-link>
-            <router-link to="/login" class="h3" v-on:click="deco">Déconexion</router-link>
+        <nav class="flex space-around align-items-center h-100">
+            <!-- Retirer le h3 fera remonté le logo -->
+            <router-link to="/" class="h3"><img src="../assets/image/icon-left-font-monochrome-black.svg"  alt="Logo goupomania" id="logo"></router-link>
+            <router-link to="/param" class="h3 font-weight-bold">Profil</router-link>
+            <router-link to="/login" class="h3 font-weight-bold" v-on:click="deco">Déconexion</router-link>
         </nav>
     </header>
 </template>
 
 <script>
-
-
 export default {
 	name: 'Header',
 
@@ -34,6 +33,10 @@ export default {
             sessionStorage.clear()
             // redirection a faire
             this.$router.push('/login')
+        },
+        hover() {
+            const element = document.getElementById("logo") 
+            element.setAttribute('src', '../assets/image/icon-left-font-monochrome-black.svg');
         }
     }
 }
@@ -45,6 +48,12 @@ export default {
         height: 60px;
         nav {
             width: 100%;
+
+            a {
+                margin-bottom: 0px;
+            }
         }
     }
+
+    
 </style>

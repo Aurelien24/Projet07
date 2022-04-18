@@ -2,12 +2,6 @@ const db = require('../models'); // cherche d'office index.js
 
 const { text } = require('body-parser');
 const jwt = require('jsonwebtoken');
-const com = require('../models/com.js');
-const user = require('../models/user.js')
-
-// Prendre /post -> Renvoit les postes (mur sans fin)
-
-// prendre /post
 
 /*GET /posts -> récup tout les post
 POST /posts - crée un post

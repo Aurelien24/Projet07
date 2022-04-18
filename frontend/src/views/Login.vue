@@ -4,6 +4,9 @@
     <Header/>
     <div class="bg-seize flex center bg-secondary-perso">
       <div class="connexion">
+        <div>
+          <img src="../assets/image/icon-above-font.svg" alt="Logo goupomania" id ="logoETnom">
+        </div>
         <div class="title">
         <h1>Veuiller vous connecter</h1>
         </div>

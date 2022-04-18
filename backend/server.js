@@ -1,13 +1,4 @@
-/* Donc non sécurisé (https)
-const http = require('http');
-
-// Requette a node
-const server = http.createServer((req, res) => {
-    res.end('Voilà la réponse du serveur !');
-});
-
-// donne le port server  || = ou
-server.listen(process.env.PORT || 3000);*/
+require('dotenv').config()
 
 //const bodyParser = require('body-parser');
 const http = require('http');
@@ -26,7 +17,8 @@ const normalizePort = val => {
   return false;
 };
 
-const port = normalizePort(process.env.PORT || '3000');
+// prend le port .env ou 3000 part défaut
+const port = normalizePort(process.env.APP_PORT || 3000);
 app.set('port', port);
 
 // recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur

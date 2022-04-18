@@ -9,7 +9,7 @@
         <div class="container">
             <div class = "row">
                 <div class="col-sm-4 col-12"> <!-- A mettre dans un components ? Ou le gérer ici. Au choix. -->
-                    <div class="ChangeMail">
+                    <div class="ChangeMail title2">
                         <h2>Vos information</h2>
                     </div>
                     <div class="form-groupe flex">
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4 col-12"> <!-- A mettre dans un components ? Ou le gérer ici. Au choix. -->
-                    <div class="ChangeMail">
+                    <div class="ChangeMail title2">
                         <h2>Changer votre email</h2>
                     </div>
                     <form @submit.prevent="changeMail">
@@ -51,13 +51,16 @@
                             <label for="pass">Confirmer votre nouveau email :</label>
                             <input type="text" class="form-control" placeholder="JeanMarcel@yahoo.com" name="newMail2" required="true" v-model="newMail2"/>
                         </div>
+                        <div>
+                            <p id="messageMail"></p>
+                        </div>
                         <div class="button flex">
                             <button class="btn bg-primary-perso h5" type="submit">Changer votre email</button>
                         </div>
                     </form>
                 </div>
                 <div class="col-sm-4 col-12"> <!-- A mettre dans un components ? Ou le gérer ici. Au choix. -->
-                    <div class="ChangeMDP">
+                    <div class="ChangeMDP title2">
                         <h2>Changer votre mot de passe</h2>
                     </div>
                     <form @submit.prevent="changeMDP">
@@ -72,6 +75,9 @@
                         <div class="form-groupe flex">
                             <label for="pass">Confirmer votre nouveau mot de passe :</label>
                             <input type="password" class="form-control" placeholder="******" name="newPassword2" required="true" v-model="newPassword2"/>
+                        </div>
+                        <div>
+                            <p id="messageMDP"></p>
                         </div>
                         <div class="button flex">
                             <button class="btn bg-primary-perso h5" type="submit">Changer votre mot de passe</button>
@@ -120,7 +126,7 @@ export default {
                     // ATTENTION CE USERNAME N'EST PAS SéCURISé
                     username: window.sessionStorage.username,
                     passwordMail: this.passwordMail,
-                    newMail: this.newMail,
+                    email: this.newMail,
                     newMail2: this.newMail2
                 }
 
@@ -136,8 +142,18 @@ export default {
                 console.log(newMail + " Seras le nouvel email")
 
                 fetch("http://localhost:3000/api/changeEmail", option)
-                    .then(response => response.json())
+                    .then(response => {
+                        response.json()
+                            .then(responseJson => {
+                                const p = document.getElementById("messageMail")
+                                console.log(responseJson)
+                                p.innerText = responseJson.message
+                            })
+                    })
                     .catch(err => console.log(`Erreur avec le message : ${err}`));
+            }else{
+                const p = document.getElementById("messageMail")
+                p.innerText = "Vos deux email ne sont pas identique"
             }
         },
         changeMDP() {
@@ -152,8 +168,8 @@ export default {
 
                 let data = {
                     username: window.sessionStorage.username,
-                    password: this.passwordMDP,
-                    newPassword: this.newPassword,
+                    oldPassword: this.passwordMDP,
+                    password: this.newPassword,
                     newPassword2: this.newPassword2
                 }
 
@@ -171,7 +187,14 @@ export default {
                 console.log(newPassword + " Seras le nouvel mpd")
                 
                 fetch("http://localhost:3000/api/changeMDP", option)
-                    .then(response => response.json())
+                    .then(response => {
+                        response.json()
+                            .then(responseJson => {
+                                const p = document.getElementById("messageMDP")
+                                console.log(responseJson)
+                                p.innerText = responseJson.message
+                            })
+                    })
                     .catch(err => console.log(`Erreur avec le message : ${err}`));
             }
         },
@@ -236,3 +259,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.title2 {
+    margin-top: 10px;
+}
+</style>

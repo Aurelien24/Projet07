@@ -10,11 +10,11 @@
                         <DateVue :date ="post.createdAt"/>
                     </div>
                     <p>{{post.text}}</p>
-                    <div>
-                        <button v-on:click="modifiePost = true" v-if="admin == true"> modifier </button>
-                        <button v-on:click="modifiePost = true" v-else-if="userId == post.userId"> modifier </button>
-                        <button v-on:click="suprPost" v-if="admin == true"> supprimer </button>
-                        <button v-on:click="suprPost" v-else-if="userId == post.userId"> supprimer </button>
+                    <div class="flex justify-content-around">
+                        <button v-on:click="modifiePost = true" v-if="admin == true" class="btn bg-primary-perso h5 mt-3"> modifier </button>
+                        <button v-on:click="modifiePost = true" v-else-if="userId == post.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>
+                        <button v-on:click="suprPost" v-if="admin == true" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
+                        <button v-on:click="suprPost" v-else-if="userId == post.userId" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
                     </div>
                     
                     <form @submit.prevent="modifiePostFonction" v-if="modifiePost">
@@ -29,7 +29,7 @@
                 <div class="col-12 col-md-10 col-lg-8 maxWidth700px border">
                     <form @submit.prevent="creeCom">
                         <input type="text" class="form-control" placeholder="Votre commentaire" name="textCom" id="textCom" required="true" v-model="textCom"/>
-                        <button type="submit">commenter</button>
+                        <button type="submit" class="btn bg-primary-perso h5 mt-3">commenter</button>
                     </form>
                 </div>
                 <div class="col-12 col-md-10 col-lg-8 maxWidth700px p-0">
@@ -39,15 +39,17 @@
                             <DateVue :date ="com.createdAt"/>
                         </div>
                         <p>{{com.text}}</p>
-                        <div>
-                            <button v-on:click="modifieCom = true" v-if="admin == true"> modifier </button>
-                            <button v-on:click="modifieCom = true" v-else-if="userId == post.userId"> modifier </button>
-                            <button v-on:click="suprCom(com.id)" v-if="admin == true"> supprimer </button>
-                            <button v-on:click="suprCom(com.id)" v-else-if="userId == post.userId"> supprimer </button>
+
+                        <!-- Ne peut pas concaténer modifieCom avec l'id du com -->
+                        <div class="flex justify-content-around">
+                            <button v-on:click="modifieCom = true" v-if="admin == true" class="btn bg-primary-perso h5 mt-3"> modifier </button>
+                            <button v-on:click="modifieCom = true" v-else-if="userId == com.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>
+                            <button v-on:click="suprCom(com.id)" v-if="admin == true" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
+                            <button v-on:click="suprCom(com.id)" v-else-if="userId == com.userId" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
                         </div>
                         <form @submit.prevent="modifieComFunction(com.id)" v-if="modifieCom">
                             <input type="text" class="form-control" placeholder="Votre nouveau text" name="newTextCom" id="newTextCom" required="true" v-model="newTextCom"/>
-                            <button type="submit">modifier</button>
+                            <button type="submit" class="btn bg-primary-perso h5 mt-3">modifier</button>
                         </form>
                     </div> 
                 </div>
@@ -112,6 +114,7 @@ export default {
         },
         suprPost(){
             let id = this.$route.params.id
+            console.log(id)
             let token = window.sessionStorage.token;
 
             let postOption = {
@@ -126,12 +129,6 @@ export default {
             let postRequest = new Request ('http://localhost:3000/api/post/' + id)
 
             fetch(postRequest, postOption)
-                .then(response => response.json())
-                    .then(data => this.post=data)
-
-            let secondPostRequest = new Request ('http://localhost:3000/api/post/' + id + '/com')
-
-            fetch(secondPostRequest, postOption)
                 .then(response => response.json())
                     .then(data => this.post=data)
         },
@@ -219,9 +216,6 @@ export default {
         }
     },
     mounted() {
-
-        
-        console.log(this.$route.params.id)
 
         let id = this.$route.params.id
 

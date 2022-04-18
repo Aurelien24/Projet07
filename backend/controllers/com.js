@@ -1,7 +1,4 @@
-const Post = require('../models/post');
 const db = require('../models'); // cherche d'office index.js
-const user = require('../models/user');
-const com = require('../models/com');
 const { text } = require('body-parser');
 const jwt = require('jsonwebtoken');
 
@@ -17,24 +14,7 @@ DELETE /posts/1/comments/2
 // RÉCUPÉRER LES ID USER AVEC LE TOKEN; PRENDRE LE POSTID de l'url
 
 
-// NE PREND PAS LES PHOTOS !!!
 exports.addCom = (req, res, next) => {
-
-    /* Technique d'origine : Ne prend pas le nom d'utilisateur
-    let text = req.body.text;
-    let userId = req.body.userId;
-    let postId = req.params.postId;
-
-    //console.log('postId ='postId);
-
-    db.com.create({
-        text:text,
-        userId:userId,
-        postId:postId
-    })
-    .then(newCom => res.status(201).json({ 'postId': newCom.id }))
-    .catch(error => res.status(500).json({ error }));
-    */
 
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
@@ -54,15 +34,10 @@ exports.addCom = (req, res, next) => {
 
 exports.delCom = (req, res, next) => {
 
-    const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
-    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
-    const userId = decodedToken.userId;
-
-    let postId = req.params.postId;
-    let comId = req.params.id;
+    let comId = req.params.comId;
 
     db.com.findOne({
-        where: { id: id }
+        where: { id: comId }
     })
     .then(com => {
         com.destroy() // Erreur ?
@@ -74,8 +49,7 @@ exports.delCom = (req, res, next) => {
 
 exports.changeCom = (req, res, next) => {
 
-    let postId = req.params.postId;
-    let id = req.params.id;
+    let id = req.params.comId;
     let text = req.body.text
     db.com.findOne({ where: { id: id } })
     .then(com => {
@@ -91,13 +65,9 @@ exports.changeCom = (req, res, next) => {
 
 exports.allComOne = (req, res, next) => {
 
-    // Ne fontionne pas, ont arrive pas ici !
-
     let postId = req.params.postId;
     
-    db.com.findAll({ where: { postId: postId } }) // erreur ici
+    db.com.findAll({ where: { postId: postId } })
         .then((data) => res.status(200).json(data))
         .catch(error => res.status(400).json({ error }));
 }
-
-// ajouter le find des commentaire d'un poste. VueJs doit le demander en début de cycle de vie quand il va afficher les poste.

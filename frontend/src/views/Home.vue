@@ -4,7 +4,7 @@
         <HeaderCo/>
         
         <div class="bg-seize flex center bg-secondary-perso">
-            <div class="connexion">
+            <div class="connexion col-12 col-md-10 col-lg-8 maxWidth700px">
                 <div class="title">
                     <h1>Vous êtes "connecter"</h1>
                     <div class="flex">
@@ -65,11 +65,9 @@ export default {
         }
     },
     methods: {
-        newPost(post) {
+        newPost() {
 
             console.log("le poste se crée")
-            console.log(post.imageMsg)
-
             let data = {
                 text: this.textMsg,
                 image: this.imageMsg // regarder comment envoyer fichier avec fetch. Et pas en JSOn
@@ -88,7 +86,12 @@ export default {
             }
 
             fetch("http://localhost:3000/api/post", option)
-                .then((response) => response.json()) // , this.$router.push('/#') ne fonctionne pas pour refresh
+                .then((response) =>{
+                    console.log(response)
+                    //response.json()
+                   // this.$router.reload()
+                    
+                }) // , this.$router.push('/#') ne fonctionne pas pour refresh
                 .catch(() => alert("Une erreur est survenu"));
             //} 
         },

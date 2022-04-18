@@ -1,4 +1,3 @@
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
@@ -100,33 +99,38 @@ exports.login = (req, res, next) => {
 
 exports.changeMDP = (req, res, next) => {
 
+  // Ne vérifie pas si le nouveau mot de passe est différent de l'ancien. Logiquement si l'on change de mot de passe se seras le cas de toute facon.
+  // Renvoit des messages interpréter part le frontend
+
   const token = req.headers.authorization.split(' ')[1];
   const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
   const id = decodedToken.userId;
 
-
   db.user.findOne({ where: { id: id } })
   .then(user => {
     if (!user) {
-      return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+      return res.status(401).json({ message: 'Utilisateur non trouvé !' });
     }
-    bcrypt.compare(req.body.password, user.password)
+    // Compare l'ancien mdp avec l'actuel
+    bcrypt.compare(req.body.oldPassword, user.password)
     .then(valid => {
       if (!valid) {
-        return res.status(401).json({ error: 'Mot de passe incorrect !' });
+        return res.status(401).json({ message: 'Mot de passe incorrect !' });
       }
-      bcrypt.hash(req.body.newPassword, 10)
+      // Hash le mdp avant enregistrement
+      bcrypt.hash(req.body.password, 10)
       .then(hash => {
         console.log(hash)
+        // Met a jour le MDP
         db.user.update({password: hash}, { where: { id: user.id } })
           .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
-          .catch(error => res.status(400).json( error ));
+          .catch(() => res.status(500).json({ message: 'Erreur server' }));
       })
-      .catch((error) => res.status(500).json({ error }));
+      .catch(() => res.status(500).json({ message: 'Erreur server' }));
     })
-    .catch(() => res.status(500).json({ error: 'Mauvais mot de passe' }));
+    .catch(() => res.status(401).json({ message: 'Mauvais mot de passe' }));
   })
-  .catch(() => res.status(500).json({ error: 'Utilisateur non trouvé !' }));
+  .catch(() => res.status(409).json({ message: 'Utilisateur non trouvé !' }));
 };
 
 exports.addImage = (req, res, next) => {
@@ -174,20 +178,43 @@ exports.changeImage = (req, res, next) => {
 
 exports.changeEmail = (req, res, next) => {
 
+  // Ne revérifie pas la conconrdence des email (normalement vu part le frontend si l'utilisateur n'as pas triché)
+  // Renvoit les erreur en message pour une interprétation frontend 
+
   const token = req.headers.authorization.split(' ')[1];
   const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
   const id = decodedToken.userId;
 
-  const email = req.body.newMail;
+  const email = req.body.email;
 
-  db.user.findOne({ where: { id: id } })
+    // Vérifie si l'email demandé est déjà utilisé (y compris part l'utisateur fesent la demande de modification)
+  db.user.findOne({ where: { email: email } })
   .then(user => {
-
-    db.user.update({email: email}, { where: { id: user.id } })
-      .then(() => res.status(200).json({ message: 'email mis a jour'}))
-      .catch(error => res.status(400).json( error ));
+    if(!user){
+      db.user.findOne({ where: { id: id } })
+      .then(user => {
+        if (!user) {
+          return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+        }
+         // Vérifie si le mot de passe est exacte avec bcrypt 
+        bcrypt.compare(req.body.passwordMail, user.password)
+        .then(valid => {
+          if (!valid) {
+            return res.status(401).json({ error: 'Mot de passe incorrect !' });
+          }
+          // Met a jour l'adresse email
+          db.user.update({email: email}, { where: { id: user.id } })
+            .then(() => res.status(200).json({ message: 'email mis a jour'}))
+            .catch(error => res.status(400).json({ message: 'Erreur serveur' }));
+        })
+        .catch(() => res.status(401).json({ message: 'Mauvais mot de passe' }));
+      })
+      .catch(() => res.status(500).json({ message: 'Utilisateur non trouvé !' }));
+    } else {
+      return res.status(409).json({ message: 'Un utilisateur utilisent cette adresse email existe déjà'})
+    }
   })
-  .catch(() => res.status(500).json({ error: 'Utilisateur non trouvé !' }));
+  
 };
 
 exports.user = (req, res, next) => {

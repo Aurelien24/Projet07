@@ -5,10 +5,7 @@ module.exports = (req, res, next) =>  {
     next();
   } else {
     console.log("erreur mail")
-    //alert("You have entered an invalid email address!")
-
-    // FAIRE ERREUR TYPE 400
-
-    return;
+    
+    return res.status(409).json({ message: "Votre adresse email n'est pas conforme" });;
   }
 }

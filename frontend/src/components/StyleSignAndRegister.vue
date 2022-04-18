@@ -7,6 +7,11 @@ export default {
 <style lang="scss">
 // SYLE DES FORMULAIRE SignOn et Connexion (HelloWorld)
 
+#logoETnom {
+    width: 100%;
+    margin: 15px 0px 15px 0px;
+}
+
 .button {
     width: 100%;
     button {

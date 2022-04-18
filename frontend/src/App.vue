@@ -113,4 +113,45 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   text-align: center;
   color: $policePrincipal;
 }
+
+// Taille polices
+.title > h1 {
+  font-size: 30px;
+}
+.title2 > h2 {
+    font-size: 25px;
+  }
+.h3 {
+  font-size: 20px;
+}
+#logo {
+  height: 20px;
+}
+#logo:hover {
+  margin-top: 6px;
+  height: 22px;
+  border-bottom: solid 2px black;
+}
+
+@media (min-width: 600px) { 
+  .title > h1 {
+    font-size: 35px;
+  }
+  .title2 > h2 {
+    font-size: 30px;
+  }
+  .h3 {
+    font-size: 28px;
+  }
+  #logo {
+    height: 28px;
+  }
+  #logo:hover {
+    margin-top: 6px;
+    height: 31px;
+    border-bottom: solid 3px black;
+  }
+}
+
+
 </style>

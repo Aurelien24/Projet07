@@ -4,36 +4,39 @@
     <Header/>
     <div class="bg-seize flex center bg-secondary-perso">
 		<div class="connexion">
-            <div class="title">
-                <h1>Veuiller vous inscrire</h1>
-            </div>
-            <div class="formulaire">
-                <form @submit.prevent="sign">
-                    <div class="form-groupe flex">
-                        <label for="nom">Votre nom :</label>
-                        <input type="text" class="form-control" placeholder="Jean" name="username" required="true" v-model="username"/>
-                    </div>
-                    <div class="form-groupe flex">
-                        <label for="nom">Votre email :</label>
-                        <input type="text" class="form-control" placeholder="JeanMarcel@yahoo.com" name="email" required="true" v-model="email"/>
-                    </div>
-                    <div class="form-groupe flex">
-                        <label for="pass">Votre mot de passe :</label>
-                        <input type="password" class="form-control" placeholder="******" name="password" required="true" v-model="password"/>
-                    </div>
-                    <div class="form-groupe flex">
-                        <label for="pass">Confirmer votre mot de passe :</label>
-                        <input type="password" class="form-control" placeholder="******" name="password2" required="true" v-model="password2"/>
-                    </div>
-                    <div>
-                      <p id="erreur"></p>
-                    </div>
-                    <div class="button flex">
-                        <button class="bg-primary-perso h5" type="submit">Connexion</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+      <div>
+        <img src="../assets/image/icon-above-font.svg" alt="Logo goupomania" id ="logoETnom">
+      </div>
+      <div class="title">
+        <h1>Veuiller vous inscrire</h1>
+      </div>
+      <div class="formulaire">
+        <form @submit.prevent="sign">
+          <div class="form-groupe flex">
+            <label for="nom">Votre nom :</label>
+            <input type="text" class="form-control" placeholder="Jean" name="username" required="true" v-model="username"/>
+          </div>
+          <div class="form-groupe flex">
+            <label for="nom">Votre email :</label>
+            <input type="text" class="form-control" placeholder="JeanMarcel@yahoo.com" name="email" required="true" v-model="email"/>
+          </div>
+          <div class="form-groupe flex">
+            <label for="pass">Votre mot de passe :</label>
+            <input type="password" class="form-control" placeholder="******" name="password" required="true" v-model="password"/>
+          </div>
+          <div class="form-groupe flex">
+            <label for="pass">Confirmer votre mot de passe :</label>
+            <input type="password" class="form-control" placeholder="******" name="password2" required="true" v-model="password2"/>
+          </div>
+          <div>
+            <p id="erreur"></p>
+          </div>
+          <div class="button flex">
+            <button class="bg-primary-perso h5" type="submit">Connexion</button>
+          </div>
+        </form>
+      </div>
+  </div>
 	</div>
     <StyleSignAndRegister/>
   </div>
