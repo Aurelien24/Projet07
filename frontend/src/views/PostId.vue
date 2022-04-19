@@ -42,12 +42,12 @@
 
                         <!-- Ne peut pas concaténer modifieCom avec l'id du com -->
                         <div class="flex justify-content-around">
-                            <button v-on:click="modifieCom = true" v-if="admin == true" class="btn bg-primary-perso h5 mt-3"> modifier </button>
-                            <button v-on:click="modifieCom = true" v-else-if="userId == com.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>
-                            <button v-on:click="suprCom(com.id)" v-if="admin == true" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
-                            <button v-on:click="suprCom(com.id)" v-else-if="userId == com.userId" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
+                            <button v-on:click="modifieCom = com.id" v-if="admin || userId == com.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>
+                            <!--<button v-on:click="modifieCom = com.id" v-else-if="userId == com.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>-->
+                            <button v-on:click="suprCom(com.id)" v-if="admin" class="btn bg-primary-perso h5 mt-3"> supprimer admin </button>
+                            <button v-on:click="suprCom(com.id)" v-else-if="userId == com.userId" class="btn bg-primary-perso h5 mt-3"> supprimer user</button>
                         </div>
-                        <form @submit.prevent="modifieComFunction(com.id)" v-if="modifieCom">
+                        <form @submit.prevent="modifieComFunction(com.id)" v-if="modifieCom == com.id">
                             <input type="text" class="form-control" placeholder="Votre nouveau text" name="newTextCom" id="newTextCom" required="true" v-model="newTextCom"/>
                             <button type="submit" class="btn bg-primary-perso h5 mt-3">modifier</button>
                         </form>
@@ -74,8 +74,8 @@ export default {
         return {
             post : [],
             coms : [],
-            userId : window.sessionStorage.id,
-            admin : window.sessionStorage.admin,
+            userId : parseInt(window.sessionStorage.id),
+            admin : window.sessionStorage.admin === "true",
             newTextPost : '',
             textCom : '',
             modifiePost : false,
@@ -270,9 +270,3 @@ export default {
     // methods: {}
 }
 </script>
-
-<style lang="scss">
-    .maxWidth700px{
-        max-width: 700px;
-    }
-</style>

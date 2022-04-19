@@ -1,10 +1,4 @@
-
-
-<!--
- // Utilise v-if et v-else pour le statue de connexion
- -->
 <template>
-	
     <header class="header flex couleur-principal bg-primary-perso">
         <nav class="flex space-around align-items-center h-100">
             <!-- Retirer le h3 fera remonté le logo -->
@@ -26,17 +20,9 @@ export default {
     },
     methods: {
         deco() {
-
-            console.log("Déco en cour")
-            //let token = window.sessionStorage.token;
-
+            // Clean le storage et redirige
             sessionStorage.clear()
-            // redirection a faire
             this.$router.push('/login')
-        },
-        hover() {
-            const element = document.getElementById("logo") 
-            element.setAttribute('src', '../assets/image/icon-left-font-monochrome-black.svg');
         }
     }
 }
@@ -48,12 +34,6 @@ export default {
         height: 60px;
         nav {
             width: 100%;
-
-            a {
-                margin-bottom: 0px;
-            }
         }
     }
-
-    
 </style>

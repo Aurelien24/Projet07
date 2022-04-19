@@ -1,41 +1,19 @@
-<script>
-export default {
-	name: 'Header',
-	props: ['url', 'url2', 'url3']
-}
-/*export default {
-	name: 'Header',
-    props: ['url', 'url2', 'url3']
-
-    data(){
-    return {
-
-    }
-    },
-    methods: {
-        hover() {
-            const element = document.getElementById("logo") 
-            element.setAttribute('src', '../assets/image/icon-left-font.svg');
-        }
-    }
-}
-*/
-</script>
-
-<!--
- // Utilise v-if et v-else pour le statue de connexion
- -->
 <template>
 	
     <header class="header flex couleur-principal bg-primary-perso">
-        <nav class="flex space-around">
-            <!-- Retirer le h3 fera remonté le logo -->
-            <router-link to="/" class="h3"><img src="../assets/image/icon-left-font-monochrome-black.svg" alt="Logo groupomania" id="logo"></router-link>
+        <nav class="flex space-around maxWidth700px">
             <router-link to="/login" class="h3 font-weight-bold">Connexion</router-link>
             <router-link to="/sign" class="h3 font-weight-bold">Inscription</router-link>
         </nav>
     </header>
 </template>
+
+<script>
+export default {
+	name: 'Header',
+	props: ['url', 'url2', 'url3']
+}
+</script>
 
 <style lang="scss">
     header{
@@ -45,5 +23,17 @@ export default {
         }
     }
 
-    
+    // Style formulaire connexion inscription
+    #logoETnom {
+        width: 100%;
+        margin: 15px 0px 15px 0px;
+    }
+
+    form > div {
+        margin-top: 15px;
+    }
+
+    .maxWidth500px {
+        max-width: 500px;
+    }
 </style>

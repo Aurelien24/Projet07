@@ -133,6 +133,10 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   border-bottom: solid 2px black;
 }
 
+.maxWidth700px{
+    max-width: 700px;
+}
+
 @media (min-width: 600px) { 
   .title > h1 {
     font-size: 35px;

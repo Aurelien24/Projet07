@@ -12,24 +12,26 @@
                     <div class="ChangeMail title2">
                         <h2>Vos information</h2>
                     </div>
-                    <div class="form-groupe flex">
+                    <div class="flex-column flex">
                         <label for="nom">Votre nom :</label>
                         <div>
                             <p>{{ user.username }}</p>
                         </div>
                     </div>
-                    <div class="form-groupe flex">
+                    <div class="flex-column flex">
                         <label for="email">Votre email :</label>
                         <div>
                             <p>{{ user.email }}</p>
                         </div>
                     </div>
-                    <div class="form-groupe flex">
+                    <!--  Zone pour l'image utilisateur
+                    <div class="flex-column flex">
                         <label for="image">Votre image :</label>
                         <div>
                             <p>{{ user.image }}</p>
                         </div>
                     </div>
+                    -->
                     <div>
                         <button v-on:click="delCompte" class="btn bg-primary-perso h5">Suppression compte</button>
                     </div>
@@ -39,20 +41,20 @@
                         <h2>Changer votre email</h2>
                     </div>
                     <form @submit.prevent="changeMail">
-                        <div class="form-groupe flex">
+                        <div class="flex-column flex">
                             <label for="pass">Votre mot de passe :</label>
                             <input type="password" class="form-control" placeholder="******" name="passwordMail" required="true" v-model="passwordMail"/>
                         </div>
-                        <div class="form-groupe flex">
+                        <div class="flex-column flex">
                             <label for="pass">Votre nouveau email :</label>
                             <input type="text" class="form-control" placeholder="JeanMarcel@yahoo.com" name="newMail" required="true" v-model="newMail"/>
                         </div>
-                        <div class="form-groupe flex">
+                        <div class="flex-column flex">
                             <label for="pass">Confirmer votre nouveau email :</label>
                             <input type="text" class="form-control" placeholder="JeanMarcel@yahoo.com" name="newMail2" required="true" v-model="newMail2"/>
                         </div>
                         <div>
-                            <p id="messageMail"></p>
+                            <p id="messageMail" v-if= "emailError != ''">{{emailError}}</p>
                         </div>
                         <div class="button flex">
                             <button class="btn bg-primary-perso h5" type="submit">Changer votre email</button>
@@ -64,20 +66,20 @@
                         <h2>Changer votre mot de passe</h2>
                     </div>
                     <form @submit.prevent="changeMDP">
-                        <div class="form-groupe flex">
+                        <div class="flex-column flex">
                             <label for="pass">Votre mot de passe :</label>
                             <input type="password" class="form-control" placeholder="******" name="passwordMDP" required="true" v-model="passwordMDP"/>
                         </div>
-                        <div class="form-groupe flex">
+                        <div class="flex-column flex">
                             <label for="pass">Votre nouveau mot de passe :</label>
                             <input type="password" class="form-control" placeholder="******" name="newPassword" required="true" v-model="newPassword"/>
                         </div>
-                        <div class="form-groupe flex">
+                        <div class="flex-column flex">
                             <label for="pass">Confirmer votre nouveau mot de passe :</label>
                             <input type="password" class="form-control" placeholder="******" name="newPassword2" required="true" v-model="newPassword2"/>
                         </div>
                         <div>
-                            <p id="messageMDP"></p>
+                            <p v-if= "mdpError != ''">{{mdpError}}</p>
                         </div>
                         <div class="button flex">
                             <button class="btn bg-primary-perso h5" type="submit">Changer votre mot de passe</button>
@@ -108,7 +110,9 @@ export default {
             passwordMDP: '',
             newPassword: '',
             newPassword2: '',
-            user: []
+            user: {},
+            emailError: "",
+            mdpError: ""
         }
     },
     methods: {
@@ -137,23 +141,23 @@ export default {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token
                     },
-                    body: JSON.stringify(data)//body: JSON.stringify(data) -> récupe la variable data du dessus et non le data()
+                    body: JSON.stringify(data)
                 }
                 console.log(newMail + " Seras le nouvel email")
 
                 fetch("http://localhost:3000/api/changeEmail", option)
                     .then(response => {
+                        if( response.status == 200) {
+                            this.user.email = data.email
+                        }
                         response.json()
                             .then(responseJson => {
-                                const p = document.getElementById("messageMail")
-                                console.log(responseJson)
-                                p.innerText = responseJson.message
+                                this.emailError = responseJson.message
                             })
                     })
                     .catch(err => console.log(`Erreur avec le message : ${err}`));
             }else{
-                const p = document.getElementById("messageMail")
-                p.innerText = "Vos deux email ne sont pas identique"
+                this.emailError = "Vos deux email ne sont pas identique"
             }
         },
         changeMDP() {
@@ -190,12 +194,12 @@ export default {
                     .then(response => {
                         response.json()
                             .then(responseJson => {
-                                const p = document.getElementById("messageMDP")
-                                console.log(responseJson)
-                                p.innerText = responseJson.message
+                                this.mdpError = responseJson.message
                             })
                     })
                     .catch(err => console.log(`Erreur avec le message : ${err}`));
+            }else{
+                this.mdpError = "Vos deux mot de passe ne son pas"
             }
         },
         delCompte() {

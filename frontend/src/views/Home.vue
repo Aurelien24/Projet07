@@ -1,8 +1,6 @@
 <template>
     <div class="home">
-    <!-- Peut inclure les props-->
-        <HeaderCo/>
-        
+        <HeaderCo/>        
         <div class="bg-seize flex center bg-secondary-perso">
             <div class="connexion col-12 col-md-10 col-lg-8 maxWidth700px">
                 <div class="title">
@@ -15,18 +13,18 @@
                 <div>
                     <form @submit.prevent="newPost">
                         <textarea id="textMsg" name="textMsg" rows="5" cols="33" class="form-control" placeholder="Votre text" required="true" v-model="textMsg"> </textarea> <!-- required="false" avec image -->
-                        <!--<label for="myfile">Selectionne une image:</label>-->
-                        <!--<input type="file" id="imageMsg" name="imageMsg" accept="image/png, image/jpeg">-->
+                        <!-- Zone pour l'intégration des images non requis dans la version actuelle
+                        <label for="myfile">Selectionne une image:</label>
+                        <input type="file" id="imageMsg" name="imageMsg" accept="image/png, image/jpeg">-->
                         <button type="submit" class="btn bg-primary-perso h5 mt-3">Poster</button>
                     </form>
                     <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" >
                         <div class="bg-secondary-perso border post">
                             <div class="flex space-around">
                                 <p class="title"> Part : {{post.userName}}</p>
-                                <!--<p class="title">{{date(post.createdAt)}}</p> Faire un formatage avec le forma Date() -> to local format  date(post.createdAt) | dateFr -->
                                 <DateVue :date ="post.createdAt"/>
                             </div>
-                            <!-- <img v-if="post.image != undifine" src="{{post.image}}"> --><!-- J'ai un sérieux doute v-src ? Voir doc-->
+                            <!-- <img v-if="post.image != undifine" src="{{post.image}}"> --><!-- J'ai un sérieux doute src Voir doc-->
                             <p>{{post.text}}</p>
                         </div>
                     </router-link>
@@ -36,15 +34,10 @@
     </div>
 </template>
 
-<script > // src="../assets/js/Date.js"
-// @ is an alias to /src             setTimeout(() => {this.posts=data}, 5000)
+<script >
+// @ is an alias to /src
 import HeaderCo from '@/components/HeaderCo.vue'
-//import Date from '@/components/Date.vue' Ex ligne pour le component
-//import * as Date from '../assets/js/Date.js'
 import DateVue from '@/components/DateVue.vue'
-//import Bootstap from '@/components/DateVue.vue'
-// import router from '@/router/index.js'
-
 
 export default {
     name: 'Home',
@@ -54,14 +47,10 @@ export default {
     },
     
     data() {
-        //let moment = require('moment')
         return {
-            
-
             posts : [],  
             textMsg : '',
-            imageMsg : '',
-           //dateTest : moment(posts.Object.createdAt).format('MMMM Do YYYY, h:mm:ss a')   
+            imageMsg : ''
         }
     },
     methods: {
@@ -85,17 +74,18 @@ export default {
                 body: JSON.stringify(data)//body: JSON.stringify(data) -> récupe la variable data du dessus et non le data()
             }
 
+            
+            // Fait toujours une erreur est survenu
             fetch("http://localhost:3000/api/post", option)
                 .then((response) =>{
                     console.log(response)
-                    //response.json()
-                   // this.$router.reload()
-                   //location.reload();
-                   // LES THEN ne sont plus fait avec le bug O.o
-                    this.$router.go()
-                }) // , this.$router.push('/#') ne fonctionne pas pour refresh
+                        .then((responseJson) => {
+                            //this.posts.push(responseJson)
+                            //this.$router.go()
+                            console.log(responseJson)
+                        })
+                    })
                 .catch(() => alert("Une erreur est survenu"));
-            //} 
         },
 
         allPost(){
@@ -151,7 +141,7 @@ export default {
 
         let token = window.sessionStorage.token;
 
-        if(window.sessionStorage.token){
+        //if(window.sessionStorage.token){
 
         let option = {
             headers: {
@@ -178,9 +168,11 @@ export default {
                         console.log(post)
                         console.log('bubu consol.log passe !')
                     });  //dateTest : moment(posts.Object.createdAt).format('MMMM Do YYYY, h:mm:ss a')*/
-        } else {
+        //} 
+        /*else {
+            console.log("redirection login du monted home")
             this.$router.push('/login')
-        }
+        }*/
 
         //posts.forEach(posts.date => let posts.newDate = moment().format('MMMM Do YYYY, h:mm:ss a'))
  

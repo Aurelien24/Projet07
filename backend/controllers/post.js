@@ -13,26 +13,6 @@ DELETE /posts/1 -> supprime un post
 // NE PREND PAS LES PHOTOS !!!
 exports.addPost = (req, res, next) => {
 
-    /* Ajout sans pseudo
-
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
-    const userId = decodedToken.userId;
- 
-    // futur intégration d'image -> erreur car image n'est pas trouver si il n'y as pas a trouver d'image. Il faudra un if
-    //const image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-
-    console.log(userId)
-    //image.save()
-    //    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-    //   .catch(error => res.status(400).json({ error }));
-    //  imageURL: image
-    db.post.create({userId: userId, text: req.body.text, }) // ...imageObjet pour ne pas faire les valeur 1/1
-        .then(newPost => res.status(201).json({ 'postId': newPost.id }))
-        .catch(error => res.status(500).json({ error })); 
-    */
-
-    // Ajout avec pseudo
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
     const userId = decodedToken.userId;
@@ -40,7 +20,7 @@ exports.addPost = (req, res, next) => {
     db.user.findOne({ where: { id: userId } })
         .then(user => {
             db.post.create({userId: userId, text: req.body.text, userName: user.username}) // ...imageObjet pour ne pas faire les valeur 1/1
-                .then(newPost => res.status(201).json({ 'postId': newPost.id }))
+                .then(newPost => res.status(201).json({ 'id': newPost.id, "userName": user.username, "text": newPost.text, "imageURL": newPost.imageURL, "updatedAt": newPost.updatedAt  }))
                 .catch(error => res.status(500).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
