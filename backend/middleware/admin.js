@@ -37,7 +37,7 @@ module.exports = (req, res, next) => {
           console.log("requete autorisé")
           next();
         } else {
-          return res.status(401).json({ message : "Vous n'êtes pas autorisé a éffectuer cette action"});
+          return res.status(401).json({ message : "Vous n'êtes pas autorisé a éffectuer cette action bubu"});
         }
       })
     // Puisque l'utilisateur ne touche pas a un commentaire, ce doit être un post

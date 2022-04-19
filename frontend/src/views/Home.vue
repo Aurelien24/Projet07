@@ -90,7 +90,9 @@ export default {
                     console.log(response)
                     //response.json()
                    // this.$router.reload()
-                    
+                   //location.reload();
+                   // LES THEN ne sont plus fait avec le bug O.o
+                    this.$router.go()
                 }) // , this.$router.push('/#') ne fonctionne pas pour refresh
                 .catch(() => alert("Une erreur est survenu"));
             //} 

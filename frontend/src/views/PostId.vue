@@ -21,7 +21,7 @@
                         <input type="text" class="form-control" placeholder="Votre nouveau text" name="newTextPost" id="newTextPost" required="true" v-model="newTextPost"/>  <!-- required="false" avec image -->
                         <!--<label for="myfile">Selectionne une image:</label>
                         <input type="file" id="imageMsg" name="imageMsg" accept="image/png, image/jpeg">-->
-                        <button type="submit">modifier</button>
+                        <button type="submit" class="btn bg-primary-perso h5 mt-3">modifier</button>
                     </form>
                 </div>
             </div>
@@ -110,7 +110,10 @@ export default {
 
             fetch(postRequest, postOption)
                 .then(response => response.json())
-                    .then(data => this.post=data)
+                    .then(data => {
+                        this.post=data
+                        this.$router.go()
+                    })
         },
         suprPost(){
             let id = this.$route.params.id
@@ -130,7 +133,10 @@ export default {
 
             fetch(postRequest, postOption)
                 .then(response => response.json())
-                    .then(data => this.post=data)
+                    .then(data => {
+                        this.post=data
+                        this.$router.push('/')
+                    })
         },
         creeCom(){
             let id = this.$route.params.id
@@ -155,7 +161,10 @@ export default {
 
             fetch(comRequest, postOption)
                 .then(response => response.json())
-                    .then(data => this.post=data)
+                    .then(data => {
+                        this.post=data
+                        this.$router.go()
+                    })
         },
         modifieComFunction(com){
             console.log("modifieComFunction")
@@ -187,7 +196,10 @@ export default {
 
             fetch(comRequest, postOption)
                 .then(response => response.json())
-                    .then(data => this.post=data)
+                    .then(data => {
+                        this.post=data
+                        this.$router.go()
+                    })
         },
         suprCom(comId){
             let id = this.$route.params.id
@@ -211,7 +223,10 @@ export default {
             console.log(comRequest)
 
             fetch(comRequest, postOption)
-                .then(response => response.json())
+                .then(response => {
+                    response.json()
+                    this.$router.go()
+                })
                     .then(data => this.post=data)
         }
     },
