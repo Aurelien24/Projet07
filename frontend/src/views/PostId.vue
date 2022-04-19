@@ -42,10 +42,8 @@
 
                         <!-- Ne peut pas concaténer modifieCom avec l'id du com -->
                         <div class="flex justify-content-around">
-                            <button v-on:click="modifieCom = com.id" v-if="admin || userId == com.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>
-                            <!--<button v-on:click="modifieCom = com.id" v-else-if="userId == com.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>-->
-                            <button v-on:click="suprCom(com.id)" v-if="admin" class="btn bg-primary-perso h5 mt-3"> supprimer admin </button>
-                            <button v-on:click="suprCom(com.id)" v-else-if="userId == com.userId" class="btn bg-primary-perso h5 mt-3"> supprimer user</button>
+                            <button v-on:click="modifieCom = com.id" v-if="admin || userId == com.userId" class="btn bg-primary-perso h5 mt-3"> modifier</button>
+                            <button v-on:click="suprCom(com.id)" v-if="admin || userId == com.userId" class="btn bg-primary-perso h5 mt-3"> supprimer</button>
                         </div>
                         <form @submit.prevent="modifieComFunction(com.id)" v-if="modifieCom == com.id">
                             <input type="text" class="form-control" placeholder="Votre nouveau text" name="newTextCom" id="newTextCom" required="true" v-model="newTextCom"/>
@@ -109,11 +107,12 @@ export default {
             let postRequest = new Request ('http://localhost:3000/api/post/' + id)
 
             fetch(postRequest, postOption)
-                .then(response => response.json())
-                    .then(data => {
-                        this.post=data
-                        this.$router.go()
-                    })
+                .then(response => {
+                    if(response.status == 201) {
+                        this.post.text = newTextPost
+                        this.modifiePost = false
+                    }
+                })
         },
         suprPost(){
             let id = this.$route.params.id
@@ -132,11 +131,11 @@ export default {
             let postRequest = new Request ('http://localhost:3000/api/post/' + id)
 
             fetch(postRequest, postOption)
-                .then(response => response.json())
-                    .then(data => {
-                        this.post=data
+                .then(response => {
+                    if(response.status == 201) {
                         this.$router.push('/')
-                    })
+                    }
+                })
         },
         creeCom(){
             let id = this.$route.params.id
@@ -162,25 +161,20 @@ export default {
             fetch(comRequest, postOption)
                 .then(response => response.json())
                     .then(data => {
-                        this.post=data
-                        this.$router.go()
+                        data.id = 1
+                        this.coms.push(data)
+                        this.coms.sort(function(a,b) { return a.id - b.id})
                     })
         },
         modifieComFunction(com){
-            console.log("modifieComFunction")
-            console.log(com)
-            let id = this.$route.params.id
-            let comId = com // c'est FAUX !
-            let token = window.sessionStorage.token;
-            //let newTextPost = this.newTextPost
 
-            console.log(this.newTextCom)
+            let id = this.$route.params.id
+            let comId = com
+            let token = window.sessionStorage.token;
 
             let data = {
                 text: this.newTextCom
             }
-
-            console.log(data)
 
             let postOption = {
                 method: 'PUT',
@@ -195,11 +189,18 @@ export default {
             let comRequest = new Request ('http://localhost:3000/api/post/' + id + '/com/' + comId)
 
             fetch(comRequest, postOption)
-                .then(response => response.json())
-                    .then(data => {
-                        this.post=data
-                        this.$router.go()
-                    })
+                .then(response => {
+                    if(response.status == 201) {
+                        console.log("201 !")
+                        this.coms.forEach(com => {
+                            console.log(com.id)
+                            if(com.id == comId){
+                                com.text = this.newTextCom
+                                this.modifieCom = ''
+                            }
+                        });
+                    }
+                })
         },
         suprCom(comId){
             let id = this.$route.params.id
@@ -224,10 +225,19 @@ export default {
 
             fetch(comRequest, postOption)
                 .then(response => {
-                    response.json()
-                    this.$router.go()
+                    //this.$router.go()
+                    
+                    if(response.status == 201) {
+                        console.log("201 !")
+                        this.coms.forEach(com => {
+                            if(com.id == comId){
+                                let cible = this.coms.indexOf(com)
+                                console.log(cible)
+                                this.coms.splice(cible, 1)
+                            }
+                        });
+                    }
                 })
-                    .then(data => this.post=data)
         }
     },
     mounted() {

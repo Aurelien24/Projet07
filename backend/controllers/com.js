@@ -26,7 +26,7 @@ exports.addCom = (req, res, next) => {
     db.user.findOne({ where: { id: userId } })
         .then(user => {
             db.com.create({userId: userId, text: text, postId:postId, userName: user.username}) // ...imageObjet pour ne pas faire les valeur 1/1
-                .then(newCom => res.status(201).json({ 'comId': newCom.id }))
+                .then(newCom => res.status(201).json({ 'id': newCom.id, "userName": user.username, "text": newCom.text, "imageURL": newCom.imageURL, "updatedAt": newCom.updatedAt, "userId": newCom.userId }))
                 .catch(error => res.status(500).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
@@ -67,7 +67,7 @@ exports.allComOne = (req, res, next) => {
 
     let postId = req.params.postId;
     
-    db.com.findAll({ where: { postId: postId } })
+    db.com.findAll({ where: { postId: postId }, order: [['createdAt', 'ASC']]})
         .then((data) => res.status(200).json(data))
         .catch(error => res.status(400).json({ error }));
 }

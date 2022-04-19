@@ -18,7 +18,7 @@
                         <input type="file" id="imageMsg" name="imageMsg" accept="image/png, image/jpeg">-->
                         <button type="submit" class="btn bg-primary-perso h5 mt-3">Poster</button>
                     </form>
-                    <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts" v-bind:key="post.id" >
+                    <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts " v-bind:key="post.id" >
                         <div class="bg-secondary-perso border post">
                             <div class="flex space-around">
                                 <p class="title"> Part : {{post.userName}}</p>
@@ -26,6 +26,7 @@
                             </div>
                             <!-- <img v-if="post.image != undifine" src="{{post.image}}"> --><!-- J'ai un sérieux doute src Voir doc-->
                             <p>{{post.text}}</p>
+                            <DateModifVue :item ="post"/>
                         </div>
                     </router-link>
                 </div>
@@ -38,17 +39,19 @@
 // @ is an alias to /src
 import HeaderCo from '@/components/HeaderCo.vue'
 import DateVue from '@/components/DateVue.vue'
+import DateModifVue from '@/components/DateModifVue.vue'
 
 export default {
     name: 'Home',
     components: {
     HeaderCo,
-    DateVue
+    DateVue,
+    DateModifVue
     },
     
     data() {
         return {
-            posts : [],  
+            posts : [],
             textMsg : '',
             imageMsg : ''
         }
@@ -73,28 +76,23 @@ export default {
                 },
                 body: JSON.stringify(data)//body: JSON.stringify(data) -> récupe la variable data du dessus et non le data()
             }
-
             
-            // Fait toujours une erreur est survenu
             fetch("http://localhost:3000/api/post", option)
                 .then((response) =>{
-                    console.log(response)
+                    response.json()
                         .then((responseJson) => {
-                            //this.posts.push(responseJson)
-                            //this.$router.go()
-                            console.log(responseJson)
+                            this.posts.push(responseJson)
+                            // Compare et trie la liste. Ce fait avec L'id et donc l'ordre de création des postes.
+                            this.posts.sort( function (a,b) {return b.id - a.id})
                         })
                     })
                 .catch(() => alert("Une erreur est survenu"));
+
+            
         },
 
         allPost(){
-            console.log(window.sessionStorage.token) 
-
             let token = window.sessionStorage.token;
-
-            console.log("bonjour");
-            if(window.sessionStorage.token){
 
             let option = {
                 headers: {
@@ -107,41 +105,22 @@ export default {
             fetch("http://localhost:3000/api/post", option)
                 .then(response => response.json())
                     .then(data => this.posts=data)
-            } else {
-                console.log("vous allez etre redirigé")
-            }
         },
 
         mesPost(){
+            const id = window.sessionStorage.id
+            console.log(id)
+            
+            const supr = this.posts.filter(post => post.userId == id)
+            this.posts = supr
 
-            console.log(window.sessionStorage.token) 
-
-            let token = window.sessionStorage.token;
-
-            console.log("bonjour");
-            if(window.sessionStorage.token){
-
-            let option = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                }
-            }
-
-            fetch("http://localhost:3000/api/mesPost", option)
-                .then(response => response.json())
-                    .then(data => this.posts=data)
-            } else {
-                console.log("vous allez etre redirigé")
-            }
+            //return this.posts.filter(post => post.userId == id)
+            console.log(supr)
         }
     },
     mounted() { 
 
         let token = window.sessionStorage.token;
-
-        //if(window.sessionStorage.token){
 
         let option = {
             headers: {
@@ -153,35 +132,8 @@ export default {
 
         fetch("http://localhost:3000/api/post", option)
             .then(response => response.json())
-                .then(data => this.posts=data) 
-                
-                /*.then(data => {
-                    data.forEach(data.createdAt => {
-                        moment(post.updatedAt).format('MMMM Do YYYY, h:mm:ss a')
-                    });
-                })
-                   /*.then(posts => forEach(post => {
-                       console.log('bubu consol.log passe !') 
-                   });)
-                    // post.createdAt ==  moment(post.updatedAt).format('MMMM Do YYYY, h:mm:ss a')
-                    /*this.posts.forEach(post => {
-                        console.log(post)
-                        console.log('bubu consol.log passe !')
-                    });  //dateTest : moment(posts.Object.createdAt).format('MMMM Do YYYY, h:mm:ss a')*/
-        //} 
-        /*else {
-            console.log("redirection login du monted home")
-            this.$router.push('/login')
-        }*/
-
-        //posts.forEach(posts.date => let posts.newDate = moment().format('MMMM Do YYYY, h:mm:ss a'))
- 
-        //console.log(data)
+                .then(datas => this.posts=datas) 
     }
-    //redirection() {
-    //  window.location = "/#/login"
-    //}
-
 }
 
 </script>

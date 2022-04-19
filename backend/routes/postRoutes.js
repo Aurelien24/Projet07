@@ -14,6 +14,5 @@ router.delete('/post/:postId', auth, admin, stuffCtrl.delPost);
 router.put('/post/:postId', auth, admin, multer, stuffCtrl.changePost);
 router.get('/post', auth, stuffCtrl.allPost);
 router.get('/post/:postId', auth, stuffCtrl.onePost);
-router.get('/mesPost', auth, stuffCtrl.mesPost);
  
 module.exports = router;

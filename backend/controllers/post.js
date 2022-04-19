@@ -20,7 +20,7 @@ exports.addPost = (req, res, next) => {
     db.user.findOne({ where: { id: userId } })
         .then(user => {
             db.post.create({userId: userId, text: req.body.text, userName: user.username}) // ...imageObjet pour ne pas faire les valeur 1/1
-                .then(newPost => res.status(201).json({ 'id': newPost.id, "userName": user.username, "text": newPost.text, "imageURL": newPost.imageURL, "updatedAt": newPost.updatedAt  }))
+                .then(newPost => res.status(201).json({ 'id': newPost.id, "userName": user.username, "text": newPost.text, "imageURL": newPost.imageURL, "updatedAt": newPost.updatedAt, "createdAt": newPost.createdAt  }))
                 .catch(error => res.status(500).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
@@ -57,21 +57,7 @@ exports.changePost = (req, res, next) => {
 
 exports.allPost = (req, res, next) => {
     db.post.findAll({ order: [
-        ['updatedAt', 'DESC'],
-    ]})
-        .then((data) => res.status(200).json(data))
-        .catch(error => res.status(400).json({ error }));
-}
-
-exports.mesPost = (req, res, next) => {
-
-    // SUPPOSER Récupérer id utilisateur NE FONCTIONNE PAS !!
-    const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
-    const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
-    const id = decodedToken.userId;
-
-    db.post.findAll({ where: { userId: id },
-        order: [ ['updatedAt', 'DESC'],
+        ['createdAt', 'DESC'],
     ]})
         .then((data) => res.status(200).json(data))
         .catch(error => res.status(400).json({ error }));
