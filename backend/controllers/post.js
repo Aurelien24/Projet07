@@ -3,14 +3,6 @@ const db = require('../models'); // cherche d'office index.js
 const { text } = require('body-parser');
 const jwt = require('jsonwebtoken');
 
-/*GET /posts -> récup tout les post
-POST /posts - crée un post
-GET /posts/1 -> obtien 1 post
-PATCH|PUT /posts/1 -> modif un post
-DELETE /posts/1 -> supprime un post
-*/
-
-// NE PREND PAS LES PHOTOS !!!
 exports.addPost = (req, res, next) => {
 
     const token = req.headers.authorization.split(' ')[1];
@@ -34,8 +26,7 @@ exports.delPost = (req, res, next) => {
         where: { id: id }
     })
         .then(post => {
-            post.destroy() // Erreur ?
-
+            post.destroy()
                 .then (res.status(201).json({ message: 'post supprimer' }))
                 .catch(error => res.status(400).json({ error }));
         })
@@ -48,7 +39,7 @@ exports.changePost = (req, res, next) => {
     let text = req.body.text
     db.post.findOne({ where: { id: id } })
     .then(post => {
-        db.post.update({text: text}, { where: { id: id } }) // Erreur ?
+        db.post.update({text: text}, { where: { id: id } })
             .then(() => res.status(201).json({ message: 'Post changer' }))
             .catch(() => res.status(400).json({ error: 'Post non mis a jour !' }));
     })
@@ -70,5 +61,3 @@ exports.onePost = (req, res, next) => {
         .then((data) => res.status(200).json(data))
         .catch(error => res.status(400).json({ error }));
 }
-
-// Ajouter la demande de post. 

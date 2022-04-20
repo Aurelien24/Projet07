@@ -5,16 +5,15 @@
         <div class="container">
             <div class="row flex center">
                 <div class="col-12 col-md-10 col-lg-8 maxWidth700px border">
-                    <div class="flex justify-content-around">
+                    <div class="flex justify-content-around colomne flex-370-row">
                         <p class="title"> Part : {{post.userName}}</p>
                         <DateVue :date ="post.createdAt"/>
                     </div>
                     <p>{{post.text}}</p>
+                    <DateModifVue :item ="post"/>
                     <div class="flex justify-content-around">
-                        <button v-on:click="modifiePost = true" v-if="admin == true" class="btn bg-primary-perso h5 mt-3"> modifier </button>
-                        <button v-on:click="modifiePost = true" v-else-if="userId == post.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>
-                        <button v-on:click="suprPost" v-if="admin == true" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
-                        <button v-on:click="suprPost" v-else-if="userId == post.userId" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
+                        <button v-on:click="modifiePost = true" v-if="admin || userId == post.userId" class="btn bg-primary-perso h5 mt-3"> modifier </button>
+                        <button v-on:click="suprPost" v-if="admin ||userId == post.userId" class="btn bg-primary-perso h5 mt-3"> supprimer </button>
                     </div>
                     
                     <form @submit.prevent="modifiePostFonction" v-if="modifiePost">
@@ -34,13 +33,12 @@
                 </div>
                 <div class="col-12 col-md-10 col-lg-8 maxWidth700px p-0">
                     <div v-for="com in coms" v-bind:key="com.id" class="com border w-100">
-                        <div class="flex space-around">
+                        <div class="flex justify-content-around colomne flex-370-row">
                             <p class="title"> Part : {{com.userName}}</p>
                             <DateVue :date ="com.createdAt"/>
                         </div>
                         <p>{{com.text}}</p>
-
-                        <!-- Ne peut pas concaténer modifieCom avec l'id du com -->
+                        <DateModifVue :item ="com"/>
                         <div class="flex justify-content-around">
                             <button v-on:click="modifieCom = com.id" v-if="admin || userId == com.userId" class="btn bg-primary-perso h5 mt-3"> modifier</button>
                             <button v-on:click="suprCom(com.id)" v-if="admin || userId == com.userId" class="btn bg-primary-perso h5 mt-3"> supprimer</button>
@@ -61,12 +59,14 @@
 
 import HeaderCo from '@/components/HeaderCo.vue'
 import DateVue from '@/components/DateVue.vue'
+import DateModifVue from '@/components/DateModifVue.vue'
 
 export default {
     name: 'Param',
     components: {
         HeaderCo,
-        DateVue
+        DateVue,
+        DateModifVue
     },
     data() {
         return {
@@ -77,8 +77,7 @@ export default {
             newTextPost : '',
             textCom : '',
             modifiePost : false,
-            //modifieCom : []
-            modifieCom : false
+            modifieCom : ""
         }
     },
     methods: {
@@ -87,8 +86,6 @@ export default {
             let id = this.$route.params.id;
             let token = window.sessionStorage.token;
             let newTextPost = this.newTextPost;
-
-            console.log("newTextPost = " + newTextPost)
 
             let data = {
                 text: newTextPost
@@ -109,6 +106,7 @@ export default {
             fetch(postRequest, postOption)
                 .then(response => {
                     if(response.status == 201) {
+                        // Procède a la modification du rendu et retir le champ de modification
                         this.post.text = newTextPost
                         this.modifiePost = false
                     }
@@ -116,7 +114,6 @@ export default {
         },
         suprPost(){
             let id = this.$route.params.id
-            console.log(id)
             let token = window.sessionStorage.token;
 
             let postOption = {
@@ -133,6 +130,7 @@ export default {
             fetch(postRequest, postOption)
                 .then(response => {
                     if(response.status == 201) {
+                        // Si le post est bien supprimer, renvoit sur Home
                         this.$router.push('/')
                     }
                 })
@@ -161,9 +159,8 @@ export default {
             fetch(comRequest, postOption)
                 .then(response => response.json())
                     .then(data => {
-                        data.id = 1
-                        this.coms.push(data)
-                        this.coms.sort(function(a,b) { return a.id - b.id})
+                        // Ajoute les nouveau com au début du tableau, soit en haut des commentaires pour etre bien visible.
+                        this.coms.unshift(data)
                     })
         },
         modifieComFunction(com){
@@ -191,11 +188,11 @@ export default {
             fetch(comRequest, postOption)
                 .then(response => {
                     if(response.status == 201) {
-                        console.log("201 !")
                         this.coms.forEach(com => {
-                            console.log(com.id)
+                            // Vérifie si c'est le bon com qui passe
                             if(com.id == comId){
                                 com.text = this.newTextCom
+                                // Ferme la zone de modification
                                 this.modifieCom = ''
                             }
                         });
@@ -204,11 +201,7 @@ export default {
         },
         suprCom(comId){
             let id = this.$route.params.id
-            //let comId = comId // c'est FAUX !
             let token = window.sessionStorage.token;
-            //let newTextPost = this.newTextPost
-
-            console.log(comId)
 
             let postOption = {
                 method: 'DELETE',
@@ -221,18 +214,13 @@ export default {
 
             let comRequest = new Request ('http://localhost:3000/api/post/' + id + '/com/' + comId)
 
-            console.log(comRequest)
-
             fetch(comRequest, postOption)
                 .then(response => {
-                    //this.$router.go()
-                    
+                    // Si le post est bien supprimer du backend ont le fait sur le front
                     if(response.status == 201) {
-                        console.log("201 !")
                         this.coms.forEach(com => {
                             if(com.id == comId){
                                 let cible = this.coms.indexOf(com)
-                                console.log(cible)
                                 this.coms.splice(cible, 1)
                             }
                         });
@@ -256,27 +244,25 @@ export default {
 
         let postRequest = new Request ('http://localhost:3000/api/post/' + id)
 
+        // Récupère le post
         fetch(postRequest, postOption)
             .then(response => response.json())
                 .then(data => this.post=data)
         
         let comRequest = new Request ('http://localhost:3000/api/post/' + id + '/com')
 
-        //let data = {postId: id}
-
         let comOption = {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + token,
-            },
-            //body: JSON.stringify(data) NE FONCTIONNE PAS SUR UN GET
+            }
         }
 
+        // Récupère les coms
         fetch(comRequest, comOption)
             .then(response => response.json())
                 .then(data => this.coms=data)
     }
-    // methods: {}
 }
 </script>

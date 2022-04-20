@@ -1,6 +1,5 @@
 const { DataTypes, Model } = require('sequelize');
 
-// ... peut évité de le recopier txt:req.body.txt
 module.exports = (sequelize, Sequelize) => sequelize.define("post", {
   text: {
     type: DataTypes.STRING,

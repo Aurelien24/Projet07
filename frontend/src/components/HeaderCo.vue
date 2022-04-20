@@ -1,6 +1,6 @@
 <template>
     <header class="header flex couleur-principal bg-primary-perso">
-        <nav class="flex space-around align-items-center h-100">
+        <nav class="flex justify-content-around align-items-center h-100">
             <!-- Retirer le h3 fera remonté le logo -->
             <router-link to="/" class="h3"><img src="../assets/image/icon-left-font-monochrome-black.svg"  alt="Logo goupomania" id="logo"></router-link>
             <router-link to="/param" class="h3 font-weight-bold">Profil</router-link>
@@ -13,11 +13,6 @@
 export default {
 	name: 'Header',
 
-    data(){
-    return {
-
-    }
-    },
     methods: {
         deco() {
             // Clean le storage et redirige

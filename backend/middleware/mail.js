@@ -4,8 +4,6 @@ module.exports = (req, res, next) =>  {
   {
     next();
   } else {
-    console.log("erreur mail")
-    
     return res.status(409).json({ message: "Votre adresse email n'est pas conforme" });;
   }
 }

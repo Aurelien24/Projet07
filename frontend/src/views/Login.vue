@@ -66,11 +66,9 @@ export default {
       body: JSON.stringify(data)
     }
 
-    console.log("Le fetch de connexion va se lancer!")
-
     fetch("http://localhost:3000/api/login", option)
       .then(response => {
-        console.log(response)
+        // Passe a la suite si la réponse voulu est bien arriver
         if(response.status == 200) {
         response.json()
           
@@ -83,6 +81,7 @@ export default {
         }else{
           response.json()
             .then(responseJson => {
+              // Fait s'afficher le message d'erreur du backend
               this.error = responseJson.error
             })
         }

@@ -78,16 +78,14 @@ export default {
         body: JSON.stringify(data)
       }
 
-      console.log("Le fetch d'inscription va se lancer!")
-
-      console.log(this.username)
       fetch("http://localhost:3000/api/signup", option)
         .then((data) => {
+          // Si c'est bon nous passon a la suite, sinon message d'erreur
           if(data.status == 200){
 
             data.json()
               .then(responseJson => {
-                //console.log(response.token)
+                // Connexion automatique après inscription
                 sessionStorage.setItem('token', responseJson.token)
                 sessionStorage.setItem('id', responseJson.userId)
                 sessionStorage.setItem('admin', responseJson.admin)

@@ -8,7 +8,7 @@
         </div>
         <div class="container">
             <div class = "row">
-                <div class="col-sm-4 col-12"> <!-- A mettre dans un components ? Ou le gérer ici. Au choix. -->
+                <div class="col-sm-4 col-12">
                     <div class="ChangeMail title2">
                         <h2>Vos information</h2>
                     </div>
@@ -24,7 +24,7 @@
                             <p>{{ user.email }}</p>
                         </div>
                     </div>
-                    <!--  Zone pour l'image utilisateur
+                    <!--  Zone pour l'image utilisateur. Non implémenté.
                     <div class="flex-column flex">
                         <label for="image">Votre image :</label>
                         <div>
@@ -36,7 +36,7 @@
                         <button v-on:click="delCompte" class="btn bg-primary-perso h5">Suppression compte</button>
                     </div>
                 </div>
-                <div class="col-sm-4 col-12"> <!-- A mettre dans un components ? Ou le gérer ici. Au choix. -->
+                <div class="col-sm-4 col-12">
                     <div class="ChangeMail title2">
                         <h2>Changer votre email</h2>
                     </div>
@@ -61,7 +61,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-sm-4 col-12"> <!-- A mettre dans un components ? Ou le gérer ici. Au choix. -->
+                <div class="col-sm-4 col-12">
                     <div class="ChangeMDP title2">
                         <h2>Changer votre mot de passe</h2>
                     </div>
@@ -117,21 +117,18 @@ export default {
     },
     methods: {
         changeMail() {
-            console.log("Changement de l'email lancer")
 
             let newMail = this.newMail;
             let newMail2 = this.newMail2;
 
+            // Vérifie la concordence des email ne sera pas refait part le backend
             if(newMail == newMail2){
                 
                 let token = window.sessionStorage.token;
 
                 let data = {
-                    // ATTENTION CE USERNAME N'EST PAS SéCURISé
-                    username: window.sessionStorage.username,
                     passwordMail: this.passwordMail,
-                    email: this.newMail,
-                    newMail2: this.newMail2
+                    email: this.newMail
                 }
 
                 let option = {
@@ -143,15 +140,16 @@ export default {
                     },
                     body: JSON.stringify(data)
                 }
-                console.log(newMail + " Seras le nouvel email")
 
                 fetch("http://localhost:3000/api/changeEmail", option)
                     .then(response => {
                         if( response.status == 200) {
+                            // Change l'affichage de l'email
                             this.user.email = data.email
                         }
                         response.json()
                             .then(responseJson => {
+                                // Dans tout les cas, affiche le résultat
                                 this.emailError = responseJson.message
                             })
                     })
@@ -161,23 +159,19 @@ export default {
             }
         },
         changeMDP() {
-            console.log("Changement du mdp lancer")
 
             let newPassword = this.newPassword;
             let newPassword2 = this.newPassword2;
 
+            // Compare les deux mot de passe
             if(newPassword == newPassword2){
 
                 let token = window.sessionStorage.token;
 
                 let data = {
-                    username: window.sessionStorage.username,
                     oldPassword: this.passwordMDP,
-                    password: this.newPassword,
-                    newPassword2: this.newPassword2
+                    password: this.newPassword
                 }
-
-                console.log(data.username)
 
                 let option = {
                     method: 'PUT',
@@ -186,14 +180,14 @@ export default {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token
                     },
-                    body: JSON.stringify(data)//body: JSON.stringify(data) -> récupe la variable data du dessus et non le data()
+                    body: JSON.stringify(data)
                 }
-                console.log(newPassword + " Seras le nouvel mpd")
-                
+
                 fetch("http://localhost:3000/api/changeMDP", option)
                     .then(response => {
                         response.json()
                             .then(responseJson => {
+                                // Revoit le résultat du serveur
                                 this.mdpError = responseJson.message
                             })
                     })
@@ -204,6 +198,7 @@ export default {
         },
         delCompte() {
 
+            // S'assure de la volonté de l'utilisateur via le prompt.
             let mdp = prompt("Etes vous sur de vouloir supprimer votre compte ? Toute suppression est déffinitive. Veuillez entrer votre mot de passe pour confirmer.")
             
             if(mdp != null){
@@ -227,6 +222,7 @@ export default {
                     .then(response => {
                         
                         if(response.status == 200) {
+                            // Le compte est supprimer, ont nettoy le sessionStorage et renvoit sur login
                             sessionStorage.clear()
                             this.$router.push('/login')
                         }else{
@@ -242,11 +238,9 @@ export default {
     mounted() {
 
 
-        // Récupérer l'id du token pour savoir des identifien !
+        // Le backend récupére l'id du token pour savoir des identifiens
 
         let token = window.sessionStorage.token;
-
-        console.log("bonjour");
 
         let option = {
             headers: {

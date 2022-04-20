@@ -1,5 +1,5 @@
 <template>
-    <p v-if ="item.updatedAt != item.createdAt" class="mt-4">Dernière modification : {{formatDate}}</p>
+    <p v-if ="item.updatedAt != item.createdAt" class="mt-4 font-italic">Dernière modification : {{formatDate}}</p>
 </template>
 
 <script>
@@ -17,7 +17,7 @@ export default {
     },
     computed: {
         formatDate () {
-            console.log(moment(this.item.updatedAt).calendar())
+            // renvoit une date type : Hier à 21:22
             return moment(this.item.updatedAt).calendar();
         }
     }

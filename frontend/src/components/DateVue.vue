@@ -11,12 +11,12 @@ export default {
 	name: 'DateVue',
     props: {
         date : {
-            type : String,
             required: true
         }
     },
     computed: {
         formatDate () {
+            // renvoit une date type : Il y as 12 heures
             return moment(this.date).startOf(this.date).fromNow();
         }
     }

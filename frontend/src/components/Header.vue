@@ -1,7 +1,6 @@
 <template>
-	
     <header class="header flex couleur-principal bg-primary-perso">
-        <nav class="flex space-around maxWidth700px">
+        <nav class="flex justify-content-around maxWidth700px">
             <router-link to="/login" class="h3 font-weight-bold">Connexion</router-link>
             <router-link to="/sign" class="h3 font-weight-bold">Inscription</router-link>
         </nav>
@@ -10,8 +9,7 @@
 
 <script>
 export default {
-	name: 'Header',
-	props: ['url', 'url2', 'url3']
+	name: 'Header'
 }
 </script>
 

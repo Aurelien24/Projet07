@@ -3,16 +3,13 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
 
-    const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
+    const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
     const id = decodedToken.userId;
     const postId = req.params.postId;
     const comId = req.params.comId;
 
-  console.log("Le middleware admin est lancer")
-
-  console.log("userId : " + id + ", postId : " + postId + ", comId : " + comId)
-
+    // Prend les différend cas de figure ou l'utilisateur requière les droits administrateur.
 
   db.user.findOne({
     where: { id: id }
@@ -34,7 +31,6 @@ module.exports = (req, res, next) => {
       .then((com) => {
         // Cause un bug sur les suppréssion de commentaire : "id is not defined" et renvoit une 500
         if (id == com.userId){
-          console.log("requete autorisé")
           next();
         } else {
           return res.status(401).json({ message : "Vous n'êtes pas autorisé a éffectuer cette action bubu"});
@@ -48,7 +44,6 @@ module.exports = (req, res, next) => {
       .then((post) => {
         // Cause un bug sur les suppréssion de post : "Error: WHERE parameter "id" has invalid "undefined" value" et renvoit une 500
         if (id == post.userId){
-          console.log("requete autorisé")
           next();
         } else {
           return res.status(401).json({ message : "Vous n'êtes pas autorisé a éffectuer cette action"});

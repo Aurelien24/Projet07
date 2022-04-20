@@ -10,7 +10,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
-    // Devras réorienter vers Login tout les non connecter
   },
   {
     path: '/login',
@@ -31,7 +30,6 @@ const routes = [
     path: '/post/:id',
     name: 'PostId',
     component: PostId,
-    //params: id
   }
 ]
 
@@ -40,8 +38,7 @@ const router = createRouter({
   routes
 })
 
-console.log(routes.path + ' bubu')
-
+// Les non connecter son renvoyé sur login
 router.beforeEach((to, from, next) => {
   if(window.sessionStorage.token){
 
@@ -54,9 +51,5 @@ router.beforeEach((to, from, next) => {
     else next()
   }
 })
-
-/*function postId (route) {
-  postId = post.id;
-}*/
 
 export default router

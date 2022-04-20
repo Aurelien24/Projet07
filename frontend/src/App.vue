@@ -9,7 +9,6 @@
 $bg-primary : #6dc9f0;
 // fond corps de page
 $bg-secondary : #F0F2F5;
-//$bg-tertiary : #dee0e4ee;
 $couleurSecondair : #107761;
 $policePrincipal : black;
 
@@ -20,10 +19,6 @@ $policePrincipal : black;
   a {
     font-weight: bold;
     color: $policePrincipal;
-
-    //&.router-link-exact-active {
-    //  color: #107761;
-    //}
   }
 }
 
@@ -38,9 +33,6 @@ body{
 .bg-secondary-perso {
   background-color: $bg-secondary;
 }
-//.bg-tertiary {
-//  background-color: $bg-tertiary;
-//}
 a:hover {
   color: $couleurSecondair;
 }
@@ -57,7 +49,6 @@ a
 {
   text-decoration: none;
 }
-// règle a suppr ?
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
   color: inherit;
   text-decoration: none;
@@ -81,16 +72,39 @@ textarea {
 [role=button] {
   cursor: pointer;
 }
+
+.border {
+    margin-top: 15px;
+    padding: 5px;
+
+    .title {
+        text-align: left;
+        margin-top: 5px;
+    }
+}
 // gestion de flex
 .flex
 {
   display: flex;
 }
-.space-around{
-  justify-content:space-around;
-}
+
 .center{
   justify-content: center;
+}
+
+// Le flex colomne de bootstrap as un important. Ne permet pas le changement a 370px
+.colomne{
+  flex-direction: column;
+  align-items: center;
+  line-height: 10px;
+  margin-bottom: 16px ;
+}
+
+@media (min-width: 370px) { 
+  .flex-370-row {
+    flex-direction: row;
+    
+  }
 }
 
 // Anti répétition
@@ -107,7 +121,7 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -156,6 +170,4 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
     border-bottom: solid 3px black;
   }
 }
-
-
 </style>

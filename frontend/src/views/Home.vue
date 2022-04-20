@@ -20,7 +20,7 @@
                     </form>
                     <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts " v-bind:key="post.id" >
                         <div class="bg-secondary-perso border post">
-                            <div class="flex space-around">
+                            <div class="flex justify-content-around colomne flex-370-row">
                                 <p class="title"> Part : {{post.userName}}</p>
                                 <DateVue :date ="post.createdAt"/>
                             </div>
@@ -58,11 +58,9 @@ export default {
     },
     methods: {
         newPost() {
-
-            console.log("le poste se crée")
+            
             let data = {
-                text: this.textMsg,
-                image: this.imageMsg // regarder comment envoyer fichier avec fetch. Et pas en JSOn
+                text: this.textMsg
             }
 
             let token = window.sessionStorage.token;
@@ -74,24 +72,28 @@ export default {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
                 },
-                body: JSON.stringify(data)//body: JSON.stringify(data) -> récupe la variable data du dessus et non le data()
+                body: JSON.stringify(data)
             }
             
             fetch("http://localhost:3000/api/post", option)
                 .then((response) =>{
-                    response.json()
+                    if(response.status == 201){
+                        response.json()
                         .then((responseJson) => {
+                            // Puch le nouveau post. Il est renvoyé part le frontend. Il as tout ce qu'il faut
                             this.posts.push(responseJson)
                             // Compare et trie la liste. Ce fait avec L'id et donc l'ordre de création des postes.
                             this.posts.sort( function (a,b) {return b.id - a.id})
                         })
-                    })
+                    }
+                })
                 .catch(() => alert("Une erreur est survenu"));
 
             
         },
 
         allPost(){
+            // Reprend tout les posts. Si on clique sur nouveauté. Évite de recharger la page.
             let token = window.sessionStorage.token;
 
             let option = {
@@ -108,14 +110,11 @@ export default {
         },
 
         mesPost(){
+            // Retire tout les postes qui ne sont pas les notres de la liste
             const id = window.sessionStorage.id
-            console.log(id)
             
             const supr = this.posts.filter(post => post.userId == id)
             this.posts = supr
-
-            //return this.posts.filter(post => post.userId == id)
-            console.log(supr)
         }
     },
     mounted() { 
@@ -130,6 +129,7 @@ export default {
             }
         }
 
+        // Récupère directement la liste des posts pour l'établir
         fetch("http://localhost:3000/api/post", option)
             .then(response => response.json())
                 .then(datas => this.posts=datas) 
@@ -137,19 +137,3 @@ export default {
 }
 
 </script>
-
-<style lang="scss">
-// h1 seize ?
-
-.border {
-    margin-top: 15px;
-    padding: 5px;
-    //border: 1px, solid, black;
-    border: medium solid black;;
-
-    .title {
-        text-align: left;
-        margin-top: 5px;
-    }
-}
-</style>

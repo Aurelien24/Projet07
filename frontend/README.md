@@ -23,6 +23,8 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
------
+----
 
-Bootstrap (CSS) est instaler en temps que components. 
+# Note :
+
+- Bootstrap est instaler part lien dans public/index.html

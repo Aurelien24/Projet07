@@ -1,38 +1,25 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
-const db = require('../models'); // cherche d'office index.js
+const db = require('../models');
 const { Op } = require("sequelize");
 
-//const connection = require('../models/query');
-
-// mdp a hacher + saler idéalement. Ne fonctionne pas du tout !!!
-
 exports.signup = (req, res, next) => {
-
-    console.log("signup se lance")
 
     let email = req.body.email;
     let username = req.body.username;
     let password = req.body.password;
     let password2 = req.body.password2;
 
-    console.log(email)
-    console.log(username)
-    console.log(password)
-    console.log(password2)
-
-    console.log("lancement vérification que ce ne soit pas null")
-
     if (email == null || username == null || password == null || password2 == null){
       console.log("information nul")
       return res.status(400).json({ 'error': 'missing parameters'});
     } else if (password == password2) {
       db.user.findOne({
-        where: { [Op.or]: [{ email: email }, { username: username }] } //  || username: username  -> a regarder aussi le pseudo !
+        where: { [Op.or]: [{ email: email }, { username: username }] } // Vérifie que le pseudo et l'email ne son pas déjà utilisé.
       })
       .then(function(userFound){
-        if (!userFound) {
+        if (!userFound) { // Si l'utilisateur n'est pas existant, l'on passe a la suite.
           bcrypt.hash(req.body.password, 10)
           .then(hash => {
             
@@ -57,12 +44,12 @@ exports.signup = (req, res, next) => {
           })
           .catch(error => res.status(500).json({ error }));
         } else {
-          return res.status(409).json({ message : 'Utilisateur déjà existant'});
+          return res.status(409).json({ message : "L'email ou le pseudo sont déjà utilisé."});
         }
       })
       .catch(error => res.status(500).json({ error }));
     } else {
-      return res.status(400).json({ message : 'Les mots de passe ne sont pas identique' })
+      return res.status(400).json({ message : 'Les mots de passe ne sont pas identique.' })
     }
     
 };
@@ -70,6 +57,8 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
 
   const username = req.body.username;
+
+  // Les erreurs sont interpréter part le frontend
 
   db.user.findOne({ where: { username: username } })
     .then(user => {
@@ -120,7 +109,6 @@ exports.changeMDP = (req, res, next) => {
       // Hash le mdp avant enregistrement
       bcrypt.hash(req.body.password, 10)
       .then(hash => {
-        console.log(hash)
         // Met a jour le MDP
         db.user.update({password: hash}, { where: { id: user.id } })
           .then(() => res.status(200).json({ message: 'Mot de passe mis a jour'}))
@@ -133,6 +121,7 @@ exports.changeMDP = (req, res, next) => {
   .catch(() => res.status(409).json({ message: 'Utilisateur non trouvé !' }));
 };
 
+// Fonctionnalité non dévelopé pour avoir un avatar.
 exports.addImage = (req, res, next) => {
 
   const token = req.headers.authorization.split(' ')[1];
@@ -153,10 +142,8 @@ exports.addImage = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
 
-// est le meme que add image
-
+// Fonctionnalité non dévelopé pour changer son avatar. -> Pourrais être fusionner avec addImages a l'avenir. (Même code)
 exports.changeImage = (req, res, next) => {
-  // Recherche l'utilisateur et ajoute une image
 
   const token = req.headers.authorization.split(' ')[1];
   const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
@@ -219,20 +206,20 @@ exports.changeEmail = (req, res, next) => {
 
 exports.user = (req, res, next) => {
 
-  const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
+  const token = req.headers.authorization.split(' ')[1];
   const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
   const id = decodedToken.userId;
 
-  // risque de donner plus que l'utilisateur et le mail
+  // Ne donne que le pseudo et l'email obligatoir sur la page Param
 
   db.user.findOne({ where: { id: id } })
-    .then(data => res.status(200).json(data))
+    .then(user => res.status(200).json({ "username": user.username,"email": user.email }))
     .catch(() => res.status(500).json({ error: 'Utilisateur non trouvé !' }));
 }
 
 exports.suprCompte = (req, res, next) => {
   
-  const token = req.headers.authorization.split(' ')[1]; //pAS D'envoit de token
+  const token = req.headers.authorization.split(' ')[1];
   const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
   const id = decodedToken.userId;
 
@@ -248,9 +235,8 @@ exports.suprCompte = (req, res, next) => {
           if (!valid) {
             return res.status(401).json({ message: 'Mot de passe incorrect !' });
           } else {
-            console.log("suppression parti ! -> manque un db backend pour finir.")
             db.user.destroy({ where: { id: id } })
-              .then(() => res.status(200).json({ message : 'Utilisateur supprimé'})) //Pas de return après supr ?
+              .then(() => res.status(200).json({ message : 'Utilisateur supprimé'}))
           }
         })
         .catch(error => res.status(500).json({ error }));
