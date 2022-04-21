@@ -19,6 +19,9 @@ module.exports = (sequelize, Sequelize) => sequelize.define("user", {
     type: DataTypes.BOOLEAN,
     allowNull: false
   },
+  conter: {
+    type: DataTypes.INTEGER
+  }
   
 }, {
   sequelize, 

@@ -65,22 +65,41 @@ exports.login = (req, res, next) => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
       }
-      bcrypt.compare(req.body.password, user.password)
-        .then(valid => {
-          if (!valid) {
-            return res.status(401).json({ error: 'Mot de passe incorrect !' });
-          }
-          res.status(200).json({
-            userId: user.id,
-            admin: user.admin,
-            token: jwt.sign(
-              { userId: user.id },
-              'Mon_TOKEN_developpement',
-              { expiresIn: '24h' }
-            )
-          });
-        })
-        .catch(error => res.status(500).json({ error }));
+
+      
+      let date1 = Date.parse(user.updatedAt); 
+      let date2 = Date.now(); 
+      let difTime = date2 - date1;
+
+      console.log(date1)
+      console.log(date2)
+      console.log(difTime)
+
+      if (user.conter >= 5 && difTime <= 3600000){ // Normalement, user.conter ne seras jamais suppérieur a 5. Le compte se bloque durent une heur.
+        return res.status(401).json({ error: "Votre compte est bloquer suite a de multiple tentative de connexion. Contacter un administrateur si vous n'en êtes pas a l'origine." });
+      } else {
+        bcrypt.compare(req.body.password, user.password)
+          .then(valid => {
+            if (!valid) {
+              let newConter = user.conter + 1
+              db.user.update({conter: newConter}, { where: { id: user.id } })
+                .then(() => res.status(401).json({ error: 'Mot de passe incorrect !' }))
+                .catch(() => res.status(401).json({ error: 'Erreur serveur' }));
+            } else {
+              db.user.update({conter: 0}, { where: { id: user.id } })
+                .then(() => res.status(200).json({
+                userId: user.id,
+                admin: user.admin,
+                token: jwt.sign(
+                  { userId: user.id },
+                  'Mon_TOKEN_developpement',
+                  { expiresIn: '24h' }
+                )
+                }));
+            }
+          })
+          .catch(error => res.status(500).json({ error }));
+      }
     })
     .catch(error => res.status(500).json({ error }));
 };

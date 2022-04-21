@@ -1,7 +1,7 @@
 # Future problème potentiel
 
 - Une seul table com existe. Si le site grandi trop, un rallentisement sera a prévoir avec des millions de post.
-- La sécurité des comptes est vulnérable contre le brut-force. Il n'y as aucune contabilisation des tentatives de connexion ni blocage de compte. 
+- Il existe une sécurité Anti Brut force au login dans controllers/user. Le vérouillage du compte dure une heur et aucun email n'est envoyé a l'utilisateur.
 
 # Instalation
 
