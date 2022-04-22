@@ -1,3 +1,4 @@
+require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
@@ -75,7 +76,7 @@ exports.login = (req, res, next) => {
       console.log(date2)
       console.log(difTime)
 
-      if (user.conter >= 5 && difTime <= 3600000){ // Normalement, user.conter ne seras jamais suppérieur a 5. Le compte se bloque durent une heur.
+      if (user.conter >= 5 && difTime <= process.env.TIME_BLOCK){ // Normalement, user.conter ne seras jamais suppérieur a 5. Le compte se bloque durent une heur.
         return res.status(401).json({ error: "Votre compte est bloquer suite a de multiple tentative de connexion. Contacter un administrateur si vous n'en êtes pas a l'origine." });
       } else {
         bcrypt.compare(req.body.password, user.password)

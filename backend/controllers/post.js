@@ -12,7 +12,7 @@ exports.addPost = (req, res, next) => {
     db.user.findOne({ where: { id: userId } })
         .then(user => {
             db.post.create({userId: userId, text: req.body.text, userName: user.username}) // ...imageObjet pour ne pas faire les valeur 1/1
-                .then(newPost => res.status(201).json({ 'id': newPost.id, "userName": user.username, "text": newPost.text, "imageURL": newPost.imageURL, "updatedAt": newPost.updatedAt, "createdAt": newPost.createdAt  }))
+                .then(newPost => res.status(201).json({ 'id': newPost.id, "userName": user.username, "text": newPost.text, "imageURL": newPost.imageURL, "updatedAt": newPost.updatedAt, "createdAt": newPost.createdAt, "userId": newPost.userId  }))
                 .catch(error => res.status(500).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
