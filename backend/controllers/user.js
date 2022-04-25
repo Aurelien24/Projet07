@@ -13,7 +13,6 @@ exports.signup = (req, res, next) => {
     let password2 = req.body.password2;
 
     if (email == null || username == null || password == null || password2 == null){
-      console.log("information nul")
       return res.status(400).json({ 'error': 'missing parameters'});
     } else if (password == password2) {
       db.user.findOne({
@@ -71,10 +70,6 @@ exports.login = (req, res, next) => {
       let date1 = Date.parse(user.updatedAt); 
       let date2 = Date.now(); 
       let difTime = date2 - date1;
-
-      console.log(date1)
-      console.log(date2)
-      console.log(difTime)
 
       if (user.conter >= 5 && difTime <= process.env.TIME_BLOCK){ // Normalement, user.conter ne seras jamais suppérieur a 5. Le compte se bloque durent une heur.
         return res.status(401).json({ error: "Votre compte est bloquer suite a de multiple tentative de connexion. Contacter un administrateur si vous n'en êtes pas a l'origine." });
@@ -201,13 +196,13 @@ exports.changeEmail = (req, res, next) => {
       db.user.findOne({ where: { id: id } })
       .then(user => {
         if (!user) {
-          return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+          return res.status(401).json({ message: 'Utilisateur non trouvé !' });
         }
          // Vérifie si le mot de passe est exacte avec bcrypt 
         bcrypt.compare(req.body.passwordMail, user.password)
         .then(valid => {
           if (!valid) {
-            return res.status(401).json({ error: 'Mot de passe incorrect !' });
+            return res.status(401).json({ message: 'Mot de passe incorrect !' });
           }
           // Met a jour l'adresse email
           db.user.update({email: email}, { where: { id: user.id } })
@@ -242,8 +237,6 @@ exports.suprCompte = (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1];
   const decodedToken = jwt.verify(token, 'Mon_TOKEN_developpement'); 
   const id = decodedToken.userId;
-
-  console.log(req.body.password)
 
   db.user.findOne({ where: { id: id } })
     .then(user => { 

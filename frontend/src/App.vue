@@ -9,6 +9,7 @@
 $bg-primary : #6dc9f0;
 // fond corps de page
 $bg-secondary : #F0F2F5;
+$bg-secondary-hover : #e6e8eb;
 $couleurSecondair : #107761;
 $policePrincipal : black;
 
@@ -38,14 +39,18 @@ a:hover {
 }
 p, a {
   color: $policePrincipal;
-} 
+}
+
+.bg-secondary-perso-hover:hover {
+  background-color: $bg-secondary-hover;
+}
 // taille du fond
 .bg-seize{
   width: 100%;
   min-height: calc(100vh - 60px);
 }
 // gestion des liens
-a 
+a
 {
   text-decoration: none;
 }

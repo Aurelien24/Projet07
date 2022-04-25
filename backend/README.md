@@ -11,7 +11,7 @@ Les tables sont suseptible de ne pas se crée comme voulut. Vérifier la ligne 3
 
 Actuellement, le vérouillage d'un compte est régler sur 1h après 5 tentative. Le temps de vérouillage se trouve dans le fichier .env.
 
-L'implémentation d'image n'est pas terminer. Cependant, Multer-Config et diverse ligne son bien présente. Multer-config requière de crée un dossier "images" pour être utilisé. (Note : Aucune fonctionnalité complète ne va apparaitre dans la version actuel du site. Tout au plus la possibilité d'enregistrer l'image dans le dossier images via insomnia)
+L'implémentation d'image n'est pas terminer. Cependant, Multer-Config et diverse ligne son bien présente. Multer-config requière de crée un dossier "images" pour être utilisé. (Note : Aucune fonctionnalité complète ne va apparaitre dans la version actuel du site. Tout au plus la possibilité d'enregistrer l'image dans le dossier images via insomnia )
 
 ### Lancer le server pour développement
 ```

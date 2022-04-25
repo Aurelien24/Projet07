@@ -18,8 +18,8 @@
                         <input type="file" id="imageMsg" name="imageMsg" accept="image/png, image/jpeg">-->
                         <button type="submit" class="btn bg-primary-perso h5 mt-3">Poster</button>
                     </form>
-                    <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts " v-bind:key="post.id" >
-                        <div class="bg-secondary-perso border post">
+                    <router-link :to="{ name: 'PostId', params: { id: post.id }}" v-for="post in posts " v-bind:key="post.id" class="router-link" >
+                        <div class="bg-secondary-perso-hover border post">
                             <div class="flex justify-content-around colomne flex-370-row">
                                 <p class="title"> Part : {{post.userName}}</p>
                                 <DateVue :date ="post.createdAt"/>

@@ -15,12 +15,9 @@ module.exports = (req, res, next) => {
     where: { id: id }
   })
   .then((user) => {
-    console.log("user.admin = " + user.admin)
-    console.log("user.id = " + user.id)
 
     // teste si l'utilisateur est un admin :
-    if (user.admin == "true") {
-      console.log("Admin détecter")
+    if (user.admin == true) {
       next();
 
     // teste si l'utilisateur modifie/supprime un commentaire :
@@ -33,7 +30,7 @@ module.exports = (req, res, next) => {
         if (id == com.userId){
           next();
         } else {
-          return res.status(401).json({ message : "Vous n'êtes pas autorisé a éffectuer cette action bubu"});
+          return res.status(401).json({ message : "Vous n'êtes pas autorisé a éffectuer cette action"});
         }
       })
     // Puisque l'utilisateur ne touche pas a un commentaire, ce doit être un post
